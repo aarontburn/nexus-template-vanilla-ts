@@ -9,6 +9,7 @@ export class SampleModule extends Module {
     private static MODULE_NAME = "{MODULE_NAME}";
 
     // Modify this to match the path of your HTML file.
+    /** @htmlpath */
     private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
 
     public constructor(ipcCallback: IPCCallback) {
