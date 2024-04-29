@@ -1,9 +1,9 @@
-import { Setting } from "../../module_builder/Setting";
-import { Process } from "../../module_builder/Process";
+import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
+import { Process } from "../../sample_module/module_builder/Process";
+import { Setting } from "../../sample_module/module_builder/Setting";
 import { NumericSetting } from "../../sample_module/module_builder/settings/types/NumericSetting";
 import { StringSetting } from "../../sample_module/module_builder/settings/types/StringSetting";
 import * as path from "path";
-import { IPCCallback } from "../../module_builder/IPCObjects";
 
 export class HomeProcess extends Process {
 	public static MODULE_NAME: string = "Home";
@@ -109,7 +109,7 @@ export class HomeProcess extends Process {
 
 	}
 
-	public recieveIpcEvent(eventType: string, data: any[]): void {
+	public receiveIPCEvent(eventType: string, data: any[]): void {
 		switch (eventType) {
 			case "init": {
 				this.initialize();

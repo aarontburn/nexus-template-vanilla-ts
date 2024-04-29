@@ -1,19 +1,20 @@
 import { BrowserWindow } from "electron";
-import { Dimension } from "./objects/Dimension";
 import * as path from "path";
-import { Process } from "./module_builder/Process";
 import { SettingsProcess } from "./built_ins/settings_module/SettingsProcess";
 import { HomeProcess } from "./built_ins/home_module/HomeProcess";
 import { IPCHandler } from "./IPCHandler";
-import { IPCCallback, IPCSource } from "./module_builder/IPCObjects";
 import { StorageHandler } from "./StorageHandler";
-import { ModuleSettings } from "./module_builder/ModuleSettings";
-import { Setting } from "./module_builder/Setting";
+import { IPCCallback, IPCSource } from "./sample_module/module_builder/IPCObjects";
+import { ModuleSettings } from "./sample_module/module_builder/ModuleSettings";
+import { Process } from "./sample_module/module_builder/Process";
+import { Setting } from "./sample_module/module_builder/Setting";
 
 // Update this import statement
 import { SampleProcess } from "./sample_module/{MODULE_NAME}Process";
 
-const WINDOW_DIMENSION: Dimension = new Dimension(1920, 1080);
+
+const WINDOW_DIMENSION: { width: number, height: number } = { width: 1920, height: 1080 };
+
 const ipcCallback: IPCCallback = {
     notifyRenderer: IPCHandler.fireEventToRenderer.bind(IPCHandler)
 }
@@ -94,7 +95,7 @@ export class ModuleController implements IPCSource {
         this.activeModules.forEach((module: Process) => {
             console.log("Registering " + module.getIpcSource() + "-process");
             this.ipc.on(module.getIpcSource() + "-process", (_, eventType: string, data: any[]) => {
-                this.modulesByName.get(module.getModuleName()).recieveIpcEvent(eventType, data);
+                this.modulesByName.get(module.getModuleName()).receiveIPCEvent(eventType, data);
             })
         });
     }
@@ -114,8 +115,8 @@ export class ModuleController implements IPCSource {
 
     private createAndShow(): void {
         this.window = new BrowserWindow({
-            height: WINDOW_DIMENSION.getHeight(),
-            width: WINDOW_DIMENSION.getWidth(),
+            height: WINDOW_DIMENSION.height,
+            width: WINDOW_DIMENSION.width,
             webPreferences: {
                 nodeIntegrationInSubFrames: true,
                 backgroundThrottling: false,

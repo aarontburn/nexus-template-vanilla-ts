@@ -1,4 +1,4 @@
-import { Process } from "../../../../module_builder/Process";
+import { Process } from "../../Process";
 import { Setting } from "../../Setting";
 import { SettingBox } from "../../SettingBox";
 import { StringSettingBox } from "../ui_components/StringSettingBox";

@@ -34,7 +34,7 @@ export class SampleProcess extends Process {
 
     }
 
-    public recieveIpcEvent(eventType: string, data: any[]): void {
+    public receiveIPCEvent(eventType: string, data: any[]): void {
         switch (eventType) {
             case "init": {
                 this.initialize();

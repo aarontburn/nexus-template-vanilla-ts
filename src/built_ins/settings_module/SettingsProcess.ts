@@ -1,12 +1,12 @@
-import { Setting } from "../../module_builder/Setting";
-import { Process } from "../../module_builder/Process";
 import * as path from "path";
-import { ModuleSettings } from "../../module_builder/ModuleSettings";
-import { SettingBox } from "../../module_builder/SettingBox";
 import { BooleanSetting } from "../../sample_module/module_builder/settings/types/BooleanSetting";
 import { HexColorSetting } from "../../sample_module/module_builder/settings/types/HexColorSetting";
 import { StorageHandler } from "../../StorageHandler";
-import { IPCCallback } from "../../module_builder/IPCObjects";
+import { Process } from "../../sample_module/module_builder/Process";
+import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
+import { ModuleSettings } from "../../sample_module/module_builder/ModuleSettings";
+import { Setting } from "../../sample_module/module_builder/Setting";
+import { SettingBox } from "../../sample_module/module_builder/SettingBox";
 
 export class SettingsProcess extends Process {
     public static MODULE_NAME: string = "Settings";
@@ -70,7 +70,7 @@ export class SettingsProcess extends Process {
     }
 
 
-    public recieveIpcEvent(eventType: string, data: any[]): void {
+    public receiveIPCEvent(eventType: string, data: any[]): void {
         switch (eventType) {
             case "settings-init": {
                 this.initialize();

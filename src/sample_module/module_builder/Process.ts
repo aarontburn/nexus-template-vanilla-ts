@@ -59,7 +59,6 @@ export abstract class Process implements IPCSource {
     }
 
     public stop(): void {
-        // moduleGUI.stop();
     }
 
     public getHtmlPath(): string {
@@ -71,7 +70,7 @@ export abstract class Process implements IPCSource {
         return this.moduleName;
     }
 
-    public abstract recieveIpcEvent(eventType: string, data: any[]): void
+    public abstract receiveIPCEvent(eventType: string, data: any[]): void
 
     public notifyObservers(eventType: string, ...data: any): void {
         this.ipcCallback.notifyRenderer(this, eventType, data);

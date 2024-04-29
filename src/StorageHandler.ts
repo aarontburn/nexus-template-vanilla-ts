@@ -1,7 +1,7 @@
-import { Process } from "./module_builder/Process";
 import fs from "fs";
 import { app } from 'electron';
-import { Setting } from "./module_builder/Setting";
+import { Process } from "./sample_module/module_builder/Process";
+import { Setting } from "./sample_module/module_builder/Setting";
 
 export class StorageHandler {
     private static PATH: string = app.getPath("home") + "/.modules/";
