@@ -11,7 +11,7 @@
 
     // If this is not shown in the developer console, the renderer wasn't properly initialized.
     // Check the {MODULE_NAME}HTML.html script name.
-    console.log(MODULE_RENDERER_NAME + " initialzed.");
+    console.log(MODULE_RENDERER_NAME + " initialized.");
 
     const sendToProcess = (eventType: string, ...data: any): void => {
         window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, data);

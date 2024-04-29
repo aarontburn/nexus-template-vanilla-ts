@@ -1,6 +1,6 @@
-import { Setting } from "../../../module_builder/settings/Setting";
-import { Module } from "../../../module_builder/Module";
-import { SettingBox } from "../../../module_builder/settings/SettingBox";
+import { Module } from "../../../../module_builder/Module";
+import { Setting } from "../../Setting";
+import { SettingBox } from "../../SettingBox";
 import { StringSettingBox } from "../ui_components/StringSettingBox";
 
 export class StringSetting extends Setting<string> {

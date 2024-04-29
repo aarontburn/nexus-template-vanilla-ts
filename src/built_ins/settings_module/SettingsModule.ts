@@ -1,12 +1,12 @@
-import { Setting } from "../../../module_builder/settings/Setting";
-import { Module } from "../../../module_builder/Module";
+import { Setting } from "../../module_builder/Setting";
+import { Module } from "../../module_builder/Module";
 import * as path from "path";
-import { ModuleSettings } from "../../../module_builder/ModuleSettings";
-import { SettingBox } from "../../../module_builder/settings/SettingBox";
-import { BooleanSetting } from "../../../built_ins/settings/types/BooleanSetting";
-import { HexColorSetting } from "../../../built_ins/settings/types/HexColorSetting";
-import { StorageHandler } from "../../../StorageHandler";
-import { IPCCallback } from "../../../module_builder/IPCObjects";
+import { ModuleSettings } from "../../module_builder/ModuleSettings";
+import { SettingBox } from "../../module_builder/SettingBox";
+import { BooleanSetting } from "../../sample_module/module_builder/settings/types/BooleanSetting";
+import { HexColorSetting } from "../../sample_module/module_builder/settings/types/HexColorSetting";
+import { StorageHandler } from "../../StorageHandler";
+import { IPCCallback } from "../../module_builder/IPCObjects";
 
 export class SettingsModule extends Module {
     public static MODULE_NAME: string = "Settings";

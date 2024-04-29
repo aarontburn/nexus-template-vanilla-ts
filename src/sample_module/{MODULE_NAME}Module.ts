@@ -1,7 +1,7 @@
 import * as path from "path";
 import { Module } from "./module_builder/Module";
 import { IPCCallback } from "./module_builder/IPCObjects";
-import { Setting } from "./module_builder/settings/Setting";
+import { Setting } from "./module_builder/Setting";
 
 
 export class SampleModule extends Module {

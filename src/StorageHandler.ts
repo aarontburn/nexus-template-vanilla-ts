@@ -1,14 +1,11 @@
 import { Module } from "./module_builder/Module";
 import fs from "fs";
 import { app } from 'electron';
-import { Setting } from "./module_builder/settings/Setting";
-import path from "path"
+import { Setting } from "./module_builder/Setting";
 
 export class StorageHandler {
     private static PATH: string = app.getPath("home") + "/.modules/";
     private static STORAGE_PATH: string = this.PATH + "/storage/";
-    private static EXTERNAL_MODULES_PATH: string = this.PATH + "/external_modules/"
-    private static COMPILED_MODULES_PATH: string = this.PATH + "/built/"
 
 
 
