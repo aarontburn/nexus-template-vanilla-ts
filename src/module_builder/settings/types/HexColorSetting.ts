@@ -1,4 +1,4 @@
-import { Module } from "../../Module";
+import { Process } from "../../Process";
 import { Setting } from "../../Setting";
 import { SettingBox } from "../../SettingBox";
 import { HexColorSettingBox } from "../ui_components/HexColorSettingBox";
@@ -6,7 +6,7 @@ import { HexColorSettingBox } from "../ui_components/HexColorSettingBox";
 
 export class HexColorSetting extends Setting<string> {
 
-    public constructor(theModule: Module) {
+    public constructor(theModule: Process) {
         super(theModule);
     }
 

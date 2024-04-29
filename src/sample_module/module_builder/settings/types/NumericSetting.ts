@@ -1,4 +1,4 @@
-import { Module } from "../../../../module_builder/Module";
+import { Process } from "../../../../module_builder/Process";
 import { Setting } from "../../Setting";
 import { SettingBox } from "../../SettingBox";
 import { NumericSettingBox } from "../ui_components/NumericSettingBox";
@@ -8,7 +8,7 @@ import { NumericSettingBox } from "../ui_components/NumericSettingBox";
 export class NumericSetting extends Setting<number> {
 
 
-    public constructor(theModule: Module) {
+    public constructor(theModule: Process) {
         super(theModule);
     }
 

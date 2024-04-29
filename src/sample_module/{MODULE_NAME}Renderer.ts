@@ -25,7 +25,7 @@
         data = data[0]; // Data is wrapped in an extra array.
         switch (eventType) {
             case "sample_event": {
-                console.log("Recieved from process: " + data);
+                console.log("Received from process: " + data);
                 sendToProcess("sample_event_from_renderer", "sample data 1", "sample data 2");
                 break;
             }

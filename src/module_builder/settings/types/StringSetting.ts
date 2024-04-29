@@ -1,11 +1,11 @@
-import { Module } from "../../Module";
+import { Process } from "../../Process";
 import { Setting } from "../../Setting";
 import { SettingBox } from "../../SettingBox";
 import { StringSettingBox } from "../ui_components/StringSettingBox";
 
 export class StringSetting extends Setting<string> {
 
-    public constructor(theModule: Module) {
+    public constructor(theModule: Process) {
         super(theModule);
     }
 
