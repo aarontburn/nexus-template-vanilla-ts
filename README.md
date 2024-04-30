@@ -19,16 +19,7 @@ This is what the initial template should look like. All assets related to your m
 
 Do not modify the contents of `module_builder` or any other files, as those changes will not be saved when used in the main application.
 
-## Strict Naming and @Annotations
-There are rules of this application that MUST be followed. One of which is certain names.
-
-### Strict Names: 
-Notated in this document as **[STRICT]**, certain files MUST be named a specific way, or else the main application will become confused when compiling your module.
-
-
-Notated in this document as **[NOT STRICT]**, this is for files that can be renamed to whatever the developer wants, but must be consistent (obviously). 
-
-### @Annotations
+## @Annotations
 Inspired by Java's Annotations, there are several locations in the template that have an @annotation before it. These annotations **must be present in order to properly compile your plugin.**
 
 All required annotations are already in the template, and you shouldn't need to add any additional ones. 
@@ -207,3 +198,27 @@ This function receives events from the renderer.
         }
     });
 ```
+
+
+# Exporting your Module
+After you finish developing your module, you may export it using an including Python script.
+
+`EXPORT.py` is a script to export your module and its dependencies. Open the script in an editor.
+
+```
+...
+
+"""
+Usage Information:
+Change this to the name of folder containing your module
+"""
+FOLDER_NAME = 'sample_module' # Change this to the name of folder containing your module
+
+...
+```
+`FOLDER_NAME` is the only thing needed for the script to locate the required files; modify it to be the name of the folder your module lives in ([from step 1 of renaming](#renaming)).
+
+Running this script will produce a new directory `output/`, which should contain a folder with an identical name to `FOLDER_NAME`. Inside are all of the files needed, alongside `node_modules/` if you used external packages, and an empty dierctory `module_builder` which is needed by the compiler.
+
+Drag this folder to `{HOME_PATH}/.modules/external_modules/`.
+
