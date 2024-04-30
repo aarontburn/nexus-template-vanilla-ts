@@ -88,7 +88,7 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 
 ```
 
-8. In `{MODULE_NAME}Module.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH`variable to point towards your HTML file (from step 5).
+8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH`variable to point towards your HTML file (from step 5).
 ```
     // Modify this to the name of your module.
     private static MODULE_NAME = "{MODULE_NAME}"; // SHOULD MATCH RENDERER
@@ -126,34 +126,46 @@ If no exceptions are thrown, and the terminal looks similar to this, you have co
 1. Electron is Chromium based. That means you have access to the Chrome Developer tools, either through the menu bar (`View > Toggle Developer Tools`), or by keyboard shortcut (`CTRL + SHIFT + I`)
 
 
-## Module Structure `{MODULE_NAME}Module.ts`
-The module file is the backend of your module. It has full access to Node packages. It does not have direct access to the frontend - you will need to communicate and send data to the frontend and do the updating there.
+## Module Structure
+Each module consists of a few required files:
+- Process: The "main" of your module. Serves as the backend and is what connects the main application to your module.
+- Renderer: The frontend of your module. In an isolated context and only handles DOM manipulation.
+- HTML: The structure of your frontend.
+- CSS: Styling for the HTML (not technically required but added for ease of development)
+
+
+## Process Structure `{MODULE_NAME}Process.ts`
+The process file is the backend of your module. It has full access to Node packages. It does not have direct access to the frontend - you will need to communicate and send data to the frontend and do the updating there.
+
+All `console.log()` will output to the terminal.
 
 
 ## Renderer Structure `{MODULE_NAME}Renderer.ts`
 The renderer file is the frontend of your module. It has **NO ACCESS** to Node packages, including `require` or `import`.
 
-It does have access to the DOM. You should send data from the Module, recieve it in the Renderer, and use that information to update the frontend. 
+It does have access to the DOM. You should send data from the process, receive it in the renderer, and use that information to update the frontend. 
+
+All `console.log()` will output to the developer console.
 
 
+## Communicating Between the Processs and Renderer
+Electron uses Inter-Process Communication (IPC) to communicate between the process and renderer. There are pre-defined functions in both the process and renderer files to simplify this process.
 
-## Communicating between Module and Renderer
-Electron uses Inter-Process Communication (IPC) to communicate between the module and renderer. There are pre-defined functions in both the module and renderer file to simplify this process.
-
-### Module
-#### Sending an event TO the Renderer
+### Process
+#### Sending an event TO the renderer
 ```
     public notifyObservers(eventType: string, ...data: any): void { ... }
     
     this.notifyObservers("{EVENT_NAME}", {EVENT_DATA_1}, {EVENT_DATA_2}, ...);
 ```
-This function is used by the module to communicate to the renderer.  
+This function is used by the process to communicate to the renderer.  
 
 `eventType`: A name for the event.  
 `...data`: Data to send to the renderer, if any.
-#### Receiving an event FROM the Renderer
+
+#### Receiving an event FROM the renderer
 ```
-    public recieveIpcEvent(eventType: string, data: any[]): void {
+    public receiveIPCEvent(eventType: string, data: any[]): void {
         switch (eventType) {
             case "init": {
                 this.initialize();
@@ -173,7 +185,7 @@ This function receives events from the renderer.
 `data`: All data passed from the renderer, if any.
 
 ### Renderer
-#### Sending an event TO the Module
+#### Sending an event TO the process
 ```
     const sendToProcess = (eventType: string, ...data: any): void => {
         window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, data);
@@ -182,7 +194,7 @@ This function receives events from the renderer.
     sendToProcess("sample_event_from_renderer", "sample data 1", "sample data 2");
 
 ```
-#### Receiving an event FROM the Module
+#### Receiving an event FROM the process
 ```
     window.parent.ipc.on(MODULE_RENDERER_NAME, (_, eventType: string, data: any[]) => {
         data = data[0]; // Data is wrapped in an extra array.
@@ -195,10 +207,3 @@ This function receives events from the renderer.
         }
     });
 ```
-
-
-
-
-
-
-
