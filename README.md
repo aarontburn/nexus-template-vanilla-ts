@@ -17,9 +17,9 @@ This is what the initial template should look like. All assets related to your m
 Do not modify the contents of `module_builder` or any other files, as those changes will not be saved when used in the main application.
 
 ## @Annotations
-Inspired by Java's Annotations, there are several locations in the template that have an @annotation before it. These annotations **must be present in order to properly compile your plugin.**
+Inspired by Java's Annotations, several locations in the template have an @annotation before it. These annotations **must be present to properly compile your plugin.**
 
-All required annotations are already in the template, and you shouldn't need to add any additional ones. 
+All required annotations are already in the template; you shouldn't need to add any additional ones. 
 
 
 Example 1: [{MODULE_NAME}HTML.html](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DHTML.html)
@@ -78,7 +78,7 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH` variable to point towards your HTML file (from step 5).
 ```
     // Modify this to the name of your module.
-    private static MODULE_NAME = "{MODULE_NAME}"; // SHOULD MATCH RENDERER
+    private static MODULE_NAME = "{MODULE_NAME}"; // MUST MATCH RENDERER
 
     // Modify this to match the path of your HTML file.
     /** @htmlpath */
@@ -88,13 +88,13 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 9. In `{MODULE_NAME}Renderer.ts`, modify the `MODULE_NAME` variable to EXACTLY what you modifed the `MODULE_NAME` variable in step 8.
 ```
     // Change this to EXACTLY what is in the {MODULE_NAME}Module.MODULE_NAME field.
-    const MODULE_NAME = "{MODULE_NAME}" // SHOULD MATCH PROCESS
+    const MODULE_NAME = "{MODULE_NAME}" // MUST MATCH PROCESS
 ```
 
-10. In `ModuleController.ts`, modify the import statement to properly import your `{MODULE_NAME}Module` file.
+10. In `ModuleController.ts`, modify the `import` statement to properly import your `{MODULE_NAME}Process.ts` file.
 ```
     // Update this import statement
-    import { SampleModule } from "./sample_module/{MODULE_NAME}Module";
+    import { SampleProcess } from "./sample_module/{MODULE_NAME}Process";
 ```
 
 ## Running the application
@@ -174,9 +174,7 @@ This function receives events from the renderer.
 ### Renderer
 #### Sending an event TO the process
 ```
-    const sendToProcess = (eventType: string, ...data: any): void => {
-        window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, data);
-    }
+    const sendToProcess = (eventType: string, ...data: any): void => { }
     
     sendToProcess("sample_event_from_renderer", "sample data 1", "sample data 2");
 
@@ -197,7 +195,7 @@ This function receives events from the renderer.
 
 
 # Exporting your Module
-After you finish developing your module, you may export it using an including Python script.
+After you finish developing your module, you may export it using an included Python script.
 
 `EXPORT.py` is a script to export your module and its dependencies. Open the script in an editor.
 
@@ -206,15 +204,15 @@ After you finish developing your module, you may export it using an including Py
 
 """
 Usage Information:
-Change this to the name of folder containing your module
+Change this to the name of the folder containing your module
 """
-FOLDER_NAME = 'sample_module' # Change this to the name of folder containing your module
+FOLDER_NAME = 'sample_module' # Change this to the name of the folder containing your module
 
 ...
 ```
 `FOLDER_NAME` is the only thing needed for the script to locate the required files; modify it to be the name of the folder your module lives in ([from step 1 of renaming](#renaming)).
 
-Running this script will produce a new directory `output/`, which should contain a folder with an identical name to `FOLDER_NAME`. Inside are all of the files needed, alongside `node_modules/` if you used external packages, and an empty dierctory `module_builder` which is needed by the compiler.
+Running this script will produce a new directory `output/`, which should contain a folder with an identical name to `FOLDER_NAME`. Inside are all of the files needed, alongside `node_modules/` if you used external packages, and an empty directory `module_builder` which is needed by the compiler.
 
 Drag this folder to `{HOME_PATH}/.modules/external_modules/`.
 
