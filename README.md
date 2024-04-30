@@ -58,8 +58,8 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 1. Rename the `sample_module` directory to the name of your module. 
 2. Rename `{MODULE_NAME}.css` to a proper name. **[NOT STRICT]**
 3. Rename `{MODULE_NAME}Renderer.ts` to a proper name.
-4. Rename `{MODULE_NAME}Module.ts` to a proper name.  
-\* This file **MUST** end with `Module.ts
+4. Rename `{MODULE_NAME}Process.ts` to a proper name.  
+\* This file **MUST** end with `Process.ts
 5. Rename `{MODULE_NAME}HTML.html` to a proper name.
 6. In `{MODULE_NAME}HTML.html`, modify the CSS `<link>`  `href`'s location to the name of your CSS file (in step 2).
 ```
