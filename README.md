@@ -1,6 +1,6 @@
 # Modules: Developer Template
-Author: @aarontburn
-Module template required for [Module](https://github.com/aarontburn/modules)
+Author: [@aarontburn](https://github.com/aarontburn)  
+Module template required for [modules](https://github.com/aarontburn/modules)
 
 # Template Installation
 To start, clone the template and do 
