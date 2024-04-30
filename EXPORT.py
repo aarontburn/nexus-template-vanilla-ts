@@ -8,19 +8,15 @@ import time
 # Author: aarontburn
 # Module Exporter
 
-# Usage Information:
-# 
-# Step 1: Change this to the name of folder containing your module
-# 
-MODULE_NAME = 'sample_module' # Change this to the name of folder containing your module
-# 
-# Step 2: Copy the resulting folder in ./output/ folder to the {HOME}/.modules/external_modules 
-# 
-# 
+"""
+Usage Information:
+Change this to the name of folder containing your module
+"""
+FOLDER_NAME = 'sample_module' # Change this to the name of folder containing your module
 
 
 PWD = str(pathlib.Path(__file__).parent.resolve())
-OUTPUT_FOLDER_PATH = PWD + "/output/" + MODULE_NAME + "/"
+OUTPUT_FOLDER_PATH = PWD + "/output/" + FOLDER_NAME + "/"
 NODE_MODULES_PATH = PWD + "/node_modules"
 
 print("\n\tCREATING FOLDERS\n")
@@ -48,7 +44,7 @@ print("\n\tCOPYING FILES\n")
 
 
 # Path of current file
-path = PWD + "/src/" + MODULE_NAME+ "/"
+path = PWD + "/src/" + FOLDER_NAME+ "/"
 
 for file in os.listdir(path):
     full_file_path = path + file

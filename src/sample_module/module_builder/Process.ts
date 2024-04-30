@@ -22,7 +22,7 @@ export abstract class Process implements IPCSource {
         this.moduleSettings.addAllSettings(this.registerSettings());
     }
 
-    getIpcSource(): string {
+    public getIPCSource(): string {
         return this.moduleName.toLowerCase();
     }
 
