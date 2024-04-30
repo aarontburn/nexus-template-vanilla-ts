@@ -88,7 +88,7 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 
 ```
 
-8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH`variable to point towards your HTML file (from step 5).
+8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH` variable to point towards your HTML file (from step 5).
 ```
     // Modify this to the name of your module.
     private static MODULE_NAME = "{MODULE_NAME}"; // SHOULD MATCH RENDERER
@@ -101,7 +101,7 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 9. In `{MODULE_NAME}Renderer.ts`, modify the `MODULE_NAME` variable to EXACTLY what you modifed the `MODULE_NAME` variable in step 8.
 ```
     // Change this to EXACTLY what is in the {MODULE_NAME}Module.MODULE_NAME field.
-    const MODULE_NAME = "{MODULE_NAME}" // SHOULD MATCH MODULE
+    const MODULE_NAME = "{MODULE_NAME}" // SHOULD MATCH PROCESS
 ```
 
 10. In `ModuleController.ts`, modify the import statement to properly import your `{MODULE_NAME}Module` file.
