@@ -1,9 +1,6 @@
 # Modules: Developer Template
-Developer template required to develop modules for [modules](https://github.com/aarontburn/modules)
-
-# Prerequisites:
-- Node?
-- Typescript?
+Author: @aarontburn
+Module template required for [Module](https://github.com/aarontburn/modules)
 
 # Template Installation
 To start, clone the template and do 
