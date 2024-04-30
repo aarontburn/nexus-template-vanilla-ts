@@ -59,7 +59,7 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
 2. Rename `{MODULE_NAME}.css` to a proper name. **[NOT STRICT]**
 3. Rename `{MODULE_NAME}Renderer.ts` to a proper name.
 4. Rename `{MODULE_NAME}Process.ts` to a proper name.  
-\* This file **MUST** end with `Process.ts
+\* This file **MUST** end with `Process.ts`
 5. Rename `{MODULE_NAME}HTML.html` to a proper name.
 6. In `{MODULE_NAME}HTML.html`, modify the CSS `<link>`  `href`'s location to the name of your CSS file (in step 2).
 ```
@@ -73,7 +73,6 @@ To be safe, rename all `{MODULE_NAME}` to the same thing.
     <!-- Note: This script tag NEEDS to stay a single line. -->
     <!-- @renderer -->
     <script defer src="../../dist/sample_module/{MODULE_NAME}Renderer.js"></script>
-
 ```
 
 8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH` variable to point towards your HTML file (from step 5).
