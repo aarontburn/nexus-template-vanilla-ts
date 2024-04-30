@@ -30,7 +30,7 @@ Example 1: [{MODULE_NAME}HTML.html](https://github.com/aarontburn/modules-module
     ...
 ```
 
-Example 2: [{MODULE_NAME}Module.ts](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DModule.ts)  
+Example 2: [{MODULE_NAME}Process.ts](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DProcess.ts)  
 
 ```
     ...
