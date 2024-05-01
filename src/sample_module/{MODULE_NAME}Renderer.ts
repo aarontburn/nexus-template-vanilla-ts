@@ -14,7 +14,7 @@
     console.log(MODULE_RENDERER_NAME + " initialized.");
 
     const sendToProcess = (eventType: string, ...data: any): void => {
-        window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, data);
+        window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, ...data);
     }
 
 
