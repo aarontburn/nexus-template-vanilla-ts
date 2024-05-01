@@ -1,12 +1,12 @@
 import * as path from "path";
-import { BooleanSetting } from "../../sample_module/module_builder/settings/types/BooleanSetting";
-import { HexColorSetting } from "../../sample_module/module_builder/settings/types/HexColorSetting";
 import { StorageHandler } from "../../StorageHandler";
-import { Process } from "../../sample_module/module_builder/Process";
 import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
 import { ModuleSettings } from "../../sample_module/module_builder/ModuleSettings";
+import { Process } from "../../sample_module/module_builder/Process";
 import { Setting } from "../../sample_module/module_builder/Setting";
 import { SettingBox } from "../../sample_module/module_builder/SettingBox";
+import { BooleanSetting } from "../../sample_module/module_builder/settings/types/BooleanSetting";
+import { HexColorSetting } from "../../sample_module/module_builder/settings/types/HexColorSetting";
 
 export class SettingsProcess extends Process {
     public static MODULE_NAME: string = "Settings";
@@ -51,11 +51,12 @@ export class SettingsProcess extends Process {
             const list: any = { module: moduleName, settings: [] };
 
             settingsList.forEach((setting: Setting<unknown>) => {
+
                 const settingBox: SettingBox<unknown> = setting.getUIComponent();
                 const settingInfo: any = {
+                    inputType: settingBox.getInputType(),
                     interactiveIds: settingBox.getInteractiveIds(),
                     ui: settingBox.getUI(),
-                    eventType: settingBox.getEventType(),
                     style: settingBox.getStyle(),
                     attribute: settingBox.getAttribute(),
                 };
@@ -76,6 +77,40 @@ export class SettingsProcess extends Process {
                 this.initialize();
                 break;
             }
+
+            case "swap-settings-tab": {
+                const moduleName: string = data[0];
+
+                for (const moduleSettings of this.moduleSettingsList) {
+                    const name: string = moduleSettings.getModuleSettingsName();
+
+                    if (moduleName !== name) {
+                        continue;
+                    }
+
+                    const settingsList: Setting<unknown>[] = moduleSettings.getSettingsList();
+                    const list: any = { module: moduleName, settings: [] };
+                    settingsList.forEach((setting: Setting<unknown>) => {
+                        const settingBox: SettingBox<unknown> = setting.getUIComponent();
+                        const settingInfo: any = {
+                            inputType: settingBox.getInputType(),
+                            interactiveIds: settingBox.getInteractiveIds(),
+                            ui: settingBox.getUI(),
+                            style: settingBox.getStyle(),
+                            attribute: settingBox.getAttribute(),
+                        };
+                        list.settings.push(settingInfo);
+                    });
+
+
+                    this.notifyObservers('swap-tab', list);
+
+
+                }
+
+                break;
+            }
+
             case "setting-modified": {
                 const elementId: string = data[0];
                 const elementValue: string = data[1];
@@ -89,9 +124,9 @@ export class SettingsProcess extends Process {
                         settingBox.getInteractiveIds().forEach((id: string) => {
                             if (id == elementId) { // found the modified setting
                                 setting.setValue(elementValue);
+                                setting.getParentModule().refreshSettings();
                                 StorageHandler.writeModuleSettingsToStorage(setting.getParentModule());
                                 this.notifyObservers("setting-modified", elementId, setting.getValue());
-                                setting.getParentModule().refreshSettings();
                                 return;
                             }
                         });

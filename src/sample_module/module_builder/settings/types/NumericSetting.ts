@@ -1,5 +1,5 @@
-import { Process } from "../../Process";
 import { Setting } from "../../Setting";
+import { Process } from "../../Process";
 import { SettingBox } from "../../SettingBox";
 import { NumericSettingBox } from "../ui_components/NumericSettingBox";
 

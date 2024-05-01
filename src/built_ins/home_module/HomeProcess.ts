@@ -1,9 +1,9 @@
+import * as path from "path";
 import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
 import { Process } from "../../sample_module/module_builder/Process";
 import { Setting } from "../../sample_module/module_builder/Setting";
 import { NumericSetting } from "../../sample_module/module_builder/settings/types/NumericSetting";
 import { StringSetting } from "../../sample_module/module_builder/settings/types/StringSetting";
-import * as path from "path";
 
 export class HomeProcess extends Process {
 	public static MODULE_NAME: string = "Home";
@@ -22,6 +22,8 @@ export class HomeProcess extends Process {
 	private static ABBREVIATED_DATE_FORMAT: Intl.DateTimeFormatOptions =
 		{ month: "numeric", day: "numeric", year: "numeric", };
 
+	private clockTimeout: NodeJS.Timeout;
+
 	public constructor(ipcCallback: IPCCallback) {
 		super(HomeProcess.MODULE_NAME, HomeProcess.HTML_PATH, ipcCallback);
 	}
@@ -32,7 +34,12 @@ export class HomeProcess extends Process {
 		// Start clock
 		this.updateDateAndTime(false);
 
-		setTimeout(() => this.updateDateAndTime(true), 1000 - new Date().getMilliseconds());
+		this.clockTimeout = setTimeout(() => this.updateDateAndTime(true), 1000 - new Date().getMilliseconds());
+	}
+
+	public stop(): void {
+		super.stop()
+		clearTimeout(this.clockTimeout);
 	}
 
 	public updateDateAndTime(repeat: boolean): void {
@@ -60,7 +67,7 @@ export class HomeProcess extends Process {
 		this.notifyObservers("update-clock", fullDate, abbreviatedDate, standardTime, militaryTime);
 
 		if (repeat) {
-			setTimeout(() => this.updateDateAndTime(true), 1000);
+			this.clockTimeout = setTimeout(() => this.updateDateAndTime(true), 1000);
 		}
 	}
 
@@ -102,10 +109,18 @@ export class HomeProcess extends Process {
 					const s: string = o.toString();
 					return s == "" || s.match("^(?!.*(\\d).*\\1)[1-4\\s]+$") ? s : null;
 				}),
-
 		];
 	}
+
+
 	public refreshSettings(): void {
+		const sizes = {
+			fullDate: this.getSettings().getSettingByName('Full Date Font Size (1)').getValue(),
+			abbrDate: this.getSettings().getSettingByName('Abbreviated Date Font Size (2)').getValue(),
+			standardTime: this.getSettings().getSettingByName('Standard Time Font Size (3)').getValue(),
+			militaryTime: this.getSettings().getSettingByName('Military Time Font Size (4)').getValue()
+		}
+		this.notifyObservers('font-sizes', sizes);
 
 	}
 

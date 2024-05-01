@@ -1,6 +1,6 @@
-import { Process } from "../../Process";
-import { Setting } from "../../Setting";
 import { SettingBox } from "../../SettingBox";
+import { Setting } from "../../Setting";
+import { Process } from "../../Process";
 import { HexColorSettingBox } from "../ui_components/HexColorSettingBox";
 
 

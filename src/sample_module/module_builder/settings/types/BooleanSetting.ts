@@ -1,5 +1,5 @@
-import { Process } from "../..//Process";
 import { Setting } from "../../Setting";
+import { Process } from "../../Process";
 import { SettingBox } from "../../SettingBox";
 import { BooleanSettingBox } from "../ui_components/BooleanSettingBox";
 
