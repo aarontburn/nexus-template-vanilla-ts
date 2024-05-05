@@ -1,4 +1,4 @@
-# Modules: Developer Template
+# Modules: Developer Quickstart Template
 Author: [@aarontburn](https://github.com/aarontburn)  
 Module template required for [modules](https://github.com/aarontburn/modules)
 
