@@ -94,8 +94,8 @@ export class ModuleController implements IPCSource {
 
         this.activeModules.forEach((module: Process) => {
             console.log("Registering " + module.getIPCSource() + "-process");
-            this.ipc.on(module.getIPCSource() + "-process", (_, eventType: string, data: any[]) => {
-                this.modulesByName.get(module.getModuleName()).receiveIPCEvent(eventType, data);
+            this.ipc.on(module.getIPCSource() + "-process", (_, eventType: string, ...data: any[]) => {
+                this.modulesByName.get(module.getModuleName()).receiveIPCEvent(eventType, ...data);
             })
         });
     }

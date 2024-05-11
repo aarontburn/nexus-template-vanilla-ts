@@ -73,10 +73,10 @@ export abstract class Process implements IPCSource {
         return this.moduleName;
     }
 
-    public abstract receiveIPCEvent(eventType: string, data: any[]): void
+    public abstract receiveIPCEvent(eventType: string, ...data: any[]): void
 
     public notifyObservers(eventType: string, ...data: any): void {
-        this.ipcCallback.notifyRenderer(this, eventType, data);
+        this.ipcCallback.notifyRenderer(this, eventType, ...data);
         // IPCHandler.fireEventToRenderer(this, eventType, data);
     }
 

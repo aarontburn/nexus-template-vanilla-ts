@@ -1,7 +1,7 @@
 (() => {
-    const MODULE_NAME = "Settings"
-    const MODULE_PROCESS_NAME = MODULE_NAME.toLowerCase() + "-process";
-    const MODULE_RENDERER_NAME = MODULE_NAME.toLowerCase() + "-renderer"
+    const MODULE_NAME: string = "Settings"
+    const MODULE_PROCESS_NAME: string = MODULE_NAME.toLowerCase() + "-process";
+    const MODULE_RENDERER_NAME: string = MODULE_NAME.toLowerCase() + "-renderer"
     const sendToProcess = (eventType: string, ...data: any): void => {
         window.parent.ipc.send(MODULE_PROCESS_NAME.toLowerCase(), eventType, ...data);
     }
@@ -14,8 +14,7 @@
     const moduleList: HTMLElement = document.getElementById("left");
     const settingsList: HTMLElement = document.getElementById("right");
 
-    window.parent.ipc.on(MODULE_RENDERER_NAME, (_, eventType: string, data: any[]) => {
-        data = data[0]; // Data is wrapped in an extra array.
+    window.parent.ipc.on(MODULE_RENDERER_NAME, (_, eventType: string, ...data: any[]) => {
         switch (eventType) {
             case "populate-settings-list": {
                 populateSettings(data[0]);
