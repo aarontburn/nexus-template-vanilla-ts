@@ -34,7 +34,6 @@
                 const newAccentColor: string = data[0];
                 const root: any = window.parent.document.querySelector(':root');
 
-                root.style.setProperty('--accent-color', data[0]);
                 root.style.setProperty('--accent-color', newAccentColor);
                 const contentChildren: HTMLCollection = window.parent.document.body.querySelector(".content").children;
 

@@ -3,7 +3,7 @@ import * as path from "path";
 import { SettingsProcess } from "./built_ins/settings_module/SettingsProcess";
 import { HomeProcess } from "./built_ins/home_module/HomeProcess";
 import { IPCHandler } from "./IPCHandler";
-import { StorageHandler } from "./StorageHandler";
+import { StorageHandler } from "./sample_module/module_builder/StorageHandler";
 import { IPCCallback, IPCSource } from "./sample_module/module_builder/IPCObjects";
 import { ModuleSettings } from "./sample_module/module_builder/ModuleSettings";
 import { Process } from "./sample_module/module_builder/Process";

@@ -1,5 +1,5 @@
 import * as path from "path";
-import { StorageHandler } from "../../StorageHandler";
+import { StorageHandler } from "../../sample_module/module_builder/StorageHandler";
 import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
 import { ModuleSettings } from "../../sample_module/module_builder/ModuleSettings";
 import { Process } from "../../sample_module/module_builder/Process";
