@@ -7,14 +7,9 @@ export interface IIPC {
         Electron.IpcRenderer
 }
 
-export interface ICONSTANTS {
-    MAIN: string,
-}
-
 
 declare global {
     interface Window {
-        ipc: IIPC
-        constants: ICONSTANTS
+        ipc: IIPC,
     }
 }

@@ -3,15 +3,20 @@ import { Process } from "../../Process";
 import { SettingBox } from "../../SettingBox";
 import { StringSettingBox } from "../ui_components/StringSettingBox";
 
+/**
+ *  Setting to hold string input.
+ * 
+ *  @author aarontburn 
+ */
 export class StringSetting extends Setting<string> {
 
-    public constructor(theModule: Process) {
-        super(theModule);
+    public constructor(module: Process) {
+        super(module);
     }
 
 
-    public validateInput(theInput: any): string | null {
-        const s: string = theInput.toString();
+    public validateInput(input: any): string | null {
+        const s: string = input.toString();
         return s == "" ? null : s;
 
     }
@@ -19,5 +24,6 @@ export class StringSetting extends Setting<string> {
     public setUIComponent(): SettingBox<string> {
         return new StringSettingBox(this);
     }
+
 
 }

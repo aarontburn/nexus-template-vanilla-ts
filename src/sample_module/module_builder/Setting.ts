@@ -3,12 +3,14 @@ import { SettingBox } from "./SettingBox";
 
 export abstract class Setting<T> {
 
-    public parentModule: Process;
-    public settingName: string;
-    public settingDescription: string;
-    public settingId: string = this.generateRandomId()
+    public readonly parentModule: Process;
+    public readonly settingID: string = "setting_id_" + Math.random().toString(36).replace('0.', '');
 
-    public inputValidator: (theInput: any) => T;
+    public name: string;
+    public description: string;
+    public accessID: string;
+
+    public inputValidator: (input: any) => T;
 
     public defaultValue: T;
     public currentValue: T;
@@ -16,40 +18,50 @@ export abstract class Setting<T> {
     public settingBox: SettingBox<T>;
 
 
-    /**
-     * Creates a new setting with the module that this setting belongs to.
-     * <p>
-     * Use the following methods to set the state of the setting:
-     * <ul>
-     *     <li>{@link setName(string)} Sets the name of the setting (REQUIRED).</li>
-     *     <li>{@link setDefault(T)}} Sets the default value of the setting (REQUIRED).</li>
-     *     <li>{@link setDescription(string)} Sets the description of the setting.</li>
-     *     <li>{@link setBoundNodeId(string)} Sets bound node ID.</li>
-     * </ul>
-     *
-     * @param theParentModule The module that this setting belongs to.
-     */
-    public constructor(theParentModule: Process) {
-        this.parentModule = theParentModule;
 
-        this.settingBox = this.setUIComponent();
+    /**
+     *  Creates a new setting with the module that this setting belongs to.
+     * 
+     *  Use the following methods to set the state of the setting:
+     *     - {@link setName} Sets the name of the setting (REQUIRED).
+     *     - {@link setDefault} Sets the default value of the setting (REQUIRED).
+     *     - {@link setDescription} Sets the description of the setting.
+     *
+     *  @param parentModule The module that this setting belongs to.
+     */
+    public constructor(parentModule: Process, defer: boolean = false) {
+        this.parentModule = parentModule;
+
+        if (!defer) {
+            this.settingBox = this.setUIComponent();
+        }
     }
 
 
     /**
+     * @private
+     * 
      * Checks if the required fields are set before data can be accessed or set.
-     * <p>
-     * The required fields are {@link settingName} and {@link defaultValue}.
+     * 
+     * The required fields are {@link name} and {@link defaultValue}.
      *
      * @throws Error if the required fields were NOT set.
      */
-    public checkRequiredFields(): void {
-        if (this.settingName == undefined || this.defaultValue == undefined) {
+    public _checkRequiredFields(): void {
+        if (this.name === undefined
+            || this.defaultValue === undefined) {
+
             throw new Error(
-                "Attempted to access '" + this.settingName + "' before all values were set. Missing:"
-                + (this.settingName == null ? "NAME" : "")
-                + (this.defaultValue == null ? "DEFAULT" : ""));
+                `Attempted to access '${this.name}' before all values were set. Missing: `
+                + (this.name === undefined ? "NAME " : "")
+                + (this.defaultValue === undefined ? "DEFAULT " : "")
+            );
         }
+    }
+
+
+    public reInitUI(): void {
+        this.settingBox = this.setUIComponent();
     }
 
 
@@ -57,31 +69,55 @@ export abstract class Setting<T> {
     /**
      * Sets the name of this setting. This is a required field.
      *
-     * @param theName The name of the setting.
+     * @param name The name of the setting.
      * @return This setting.
      * @throws Error if the name of the setting is already set.
      */
-    public setName(theName: string): Setting<T> {
-        if (this.settingName != undefined) {
-            throw new Error("Cannot reassign setting name for " + this.settingName);
+    public setName(name: string): Setting<T> {
+        if (this.name != undefined) {
+            throw new Error("Cannot reassign setting name for " + this.name);
         }
-        this.settingName = theName;
+        this.name = name;
         return this;
     }
 
     /**
-     * Sets the default value of this setting. This is a required field.
-     *
-     * @param theDefaultValue The default value of the setting.
-     * @return This setting.
-     * @throws UnsupportedOperationException if the default value of the setting is already set.
+     *  Set a unique access ID for the setting. Can be useful
+     *      to access settings without using their name. 
+     * 
+     *  @param id The ID of the setting.
+     *  @returns itself.
      */
-    public setDefault(theDefaultValue: T): Setting<T> {
-        if (this.defaultValue != undefined) {
-            throw new Error("Cannot reassign default value for " + this.settingName);
+    public setAccessID(id: string): Setting<T> {
+        if (this.accessID !== undefined) {
+            throw new Error("Cannot reassign access ID for " + this.name);
         }
-        this.defaultValue = theDefaultValue;
-        this.currentValue = theDefaultValue;
+        this.accessID = id;
+        return this;
+    }
+
+    /**
+     *  @returns the ID of this setting.
+     */
+    public getAccessID(): string {
+        return this.accessID ? this.accessID : this.name;
+    }
+
+
+
+    /**
+     *  Sets the default value of this setting. This is a required field.
+     *
+     *  @param defaultValue The default value of the setting.
+     *  @return itself.
+     *  @throws {Error} if the default value of the setting is already set.
+     */
+    public setDefault(defaultValue: T): Setting<T> {
+        if (this.defaultValue !== undefined) {
+            throw new Error("Cannot reassign default value for " + this.name);
+        }
+        this.defaultValue = defaultValue;
+        this.currentValue = defaultValue;
         return this;
     }
 
@@ -89,37 +125,33 @@ export abstract class Setting<T> {
     /**
      * Sets the description of this setting. This is NOT a required field.
      *
-     * @param theDescription The description of this setting.
-     * @return This setting.
-     * @throws Error if the description of the setting is already set.
+     * @param description The description of this setting.
+     * @return itself.
+     * @throws {Error} if the description of the setting is already set.
      */
-    public setDescription(theDescription: string): Setting<T> {
-        if (this.settingDescription != undefined) {
-            throw new Error("Cannot reassign description for " + this.settingName);
+    public setDescription(description: string): Setting<T> {
+        if (this.description != undefined) {
+            throw new Error("Cannot reassign description for " + this.name);
         }
-        this.settingDescription = theDescription;
+        this.description = description;
         return this;
     }
 
 
 
     /**
-     * Returns the name of this setting.
-     *
      * @return The name of this setting.
      */
-    public getSettingName(): string {
-        return this.settingName;
+    public getName(): string {
+        return this.name;
     }
 
 
     /**
-     * Returns the description of this setting.
-     *
-     * @return The description of this setting, or undefined if it hasn't been set.
+     * @return The description of this setting, or an empty string if it hasn't been set.
      */
     public getDescription(): string {
-        return this.settingDescription == undefined ? "" : this.settingDescription;
+        return this.description === undefined ? "" : this.description;
     }
 
 
@@ -127,81 +159,72 @@ export abstract class Setting<T> {
     /**
      * Returns the value of this setting.
      *
-     * @return The value of this setting, or null if
-     * @throws Error if an attempt was made to access the value of this setting before all
+     * @return The value of this setting.
+     * @throws {Error} if an attempt was made to access the value of this setting before all
      *                               appropriate fields were set.
      */
     public getValue(): T {
-        this.checkRequiredFields();
+        this._checkRequiredFields();
         return this.currentValue;
     }
 
 
     /**
-     * Changes the value of this setting.
-     * <p>
-     * It passes the value into {@link #parseInput(Object)}, which returns either
-     * a value of type that matches this settings type, or null indicating that it could
-     * not properly parse the input.
-     * <p>
-     * If the input is null, the current value will remain the same. Otherwise, it will update
-     * its value to the new one.
-     * <p>
-     * Once the GUI is initialized (via a call to {@link GUIHandler#isGuiInitialized()}), it will:
-     * <ul>
-     *     <li>Refresh the GUI counterpart with the updated value</li>
-     *     <li>Call for a refresh in the parent module</li>
-     *     <li>Re-write the settings for this module</li>
-     * </ul>
-     *
-     * @param theValue The new value, not null.
+     *  Changes the value of this setting.
+     * 
+     *  It passes the value into @see _parseInput, which returns either
+     *      a value of type that matches this settings type, or null indicating that it could
+     *      not properly parse the input.
+     * 
+     *  If the input is null, the current value will remain the same. Otherwise, it will update
+     *      its value to the new one.
+     * 
+     * @param value The new value, not null.
      * @throws Error if an attempt was made to set the value before all
      *                               appropriate fields were set.
      */
-    public setValue(theValue: any): void {
-        this.checkRequiredFields();
+    public setValue(value: any): void {
+        this._checkRequiredFields();
 
-        const value: T = this.parseInput(theValue);
-        this.currentValue = value != null ? value : this.currentValue;
-
-
-        
-
+        const parsedValue: T = this._parseInput(value);
+        this.currentValue = parsedValue != null ? parsedValue : this.currentValue;
     }
 
 
     /**
-     * Converts an Object input into a {@link T} type input.
-     * <p>
-     * If an {@link inputValidator} is specified, it will use it to parse the input.
-     * <p>
-     * Otherwise, it will use {@link validateInput(any)} to parse the input.
+     *  @private
+     * 
+     *  Converts a generic 'any' input into a {@link T} type input.
+     * 
+     *  If an {@link inputValidator} is specified, it will use it to parse the input.
+     * 
+     *  Otherwise, it will use {@link validateInput} to parse the input.
      *
-     * @param theInput The input to parse.
-     * @return A {@link T} type valid input, or null if the input couldn't be parsed.
+     *  @param input The input to parse.
+     *  @return A {@link T} type valid input, or null if the input couldn't be parsed.
      */
-    public parseInput(theInput: any): T {
-        if (this.inputValidator != undefined) {
-            return this.inputValidator(theInput);
+    public _parseInput(input: any): T {
+        if (this.inputValidator !== undefined) {
+            return this.inputValidator(input);
         }
 
-        return this.validateInput(theInput);
+        return this.validateInput(input);
     }
 
 
     /**
-     * Child-overridden method to parse inputs IF a {@link inputValidator} is
-     * not specified.
-     * <p>
-     * If the input is valid, it should return a {@link T} as the input.
-     * <p>
-     * Otherwise, it should send null. If null is not sent, it will attempt to assign potentially
-     * invalid inputs to this setting.
+     *  Child-overridden method to parse inputs IF a {@link inputValidator} is
+     *      not specified.
+     * 
+     *  If the input is valid, it should return a {@link T} as the input.
+     * 
+     *  Otherwise, it should send null. If null is not sent, it will attempt to assign potentially
+     *      invalid inputs to this setting.
      *
-     * @param theInput The input to parse.
-     * @return A {@link T} valid input, or null if the input could not be parsed.
+     *  @param input The input to parse.
+     *  @return A {@link T} valid input, or null if the input could not be parsed.
      */
-    public abstract validateInput(theInput: any): T | null;
+    public abstract validateInput(input: any): T | null;
 
 
     /**
@@ -212,45 +235,50 @@ export abstract class Setting<T> {
     }
 
     /**
-     * Sets the input validator for this setting.
-     * <p>
-     * {@link parseInput(Object)} will use the specified input validator instead of
-     * the {@link validateInput(Object)} to parse input.
+     *  Sets the input validator for this setting.
+     * 
+     *  The {@link _parseInput} function will use the specified input validator instead of
+     *      the {@link validateInput} to parse input.
      *
-     * @param theInputValidator The input validator to use over {@link parseInput(Object)}.
-     * @return This setting.
+     *  @param inputValidator The input validator to use over the default {@link _parseInput}.
+     *  @return itself.
+     *  @throws {Error} if the input validator is already defined.
      */
-    public setValidator(theInputValidator: (theInput: any) => T): Setting<T> {
-        if (this.inputValidator != undefined) {
-            throw new Error("Cannot redefine input validator for " + this.settingName);
+    public setValidator(inputValidator: (input: any) => T): Setting<T> {
+        if (this.inputValidator !== undefined) {
+            throw new Error("Cannot redefine input validator for " + this.name);
         }
-        this.inputValidator = theInputValidator;
+        this.inputValidator = inputValidator;
         return this;
     }
 
-
+    /**
+     *  Abstract function to be defined by child classes. 
+     * 
+     *  @returns the corresponding SettingBox of the setting.
+     */
     public abstract setUIComponent(): SettingBox<T>;
 
+    /**
+     *  @returns the UI component of this setting. 
+     */
     public getUIComponent(): SettingBox<T> {
         return this.settingBox;
     }
 
-    public generateRandomId(): string {
-        return "settingid_" + Math.random().toString(36).replace('0.', '');
+    /**
+     *  @returns The setting ID.
+     */
+    public getID(): string {
+        return this.settingID;
     }
 
-    public getId(): string {
-        return this.settingId;
-    }
-
+    /**
+     *  @returns a reference to the parent module.
+     */
     public getParentModule(): Process {
         return this.parentModule;
     }
 
 
-}
-
-
-export interface InputValidator<T> {
-    parseInput(theInput: any): T;
 }

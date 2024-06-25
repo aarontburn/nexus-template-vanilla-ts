@@ -1,104 +1,116 @@
 import * as path from "path";
+import { BrowserWindow, OpenDialogOptions, app, dialog, shell } from 'electron';
 import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
 import { ModuleSettings } from "../../sample_module/module_builder/ModuleSettings";
 import { Process } from "../../sample_module/module_builder/Process";
 import { Setting } from "../../sample_module/module_builder/Setting";
-import { SettingBox } from "../../sample_module/module_builder/SettingBox";
+import { SettingBox, InputElement, ChangeEvent } from "../../sample_module/module_builder/SettingBox";
 import { StorageHandler } from "../../sample_module/module_builder/StorageHandler";
+import { BooleanSetting } from "../../sample_module/module_builder/settings/types/BooleanSetting";
 import { HexColorSetting } from "../../sample_module/module_builder/settings/types/HexColorSetting";
+import { NumberSetting } from "../../sample_module/module_builder/settings/types/NumberSetting";
+import { ModuleCompiler } from "../../ModuleCompiler";
+
 
 export class SettingsProcess extends Process {
-    public static MODULE_NAME: string = "Settings";
-    private static HTML_PATH: string = path.join(__dirname, "./SettingsHTML.html").replace("dist", "src");
+    public static readonly MODULE_NAME: string = "Settings";
+    public static readonly MODULE_ID: string = 'built_ins.Settings';
 
-    private moduleSettingsList: ModuleSettings[] = [];
+    private static readonly HTML_PATH: string = path.join(__dirname, "./SettingsHTML.html").replace('dist', 'src');;
 
-    public constructor(ipcCallback: IPCCallback) {
+    private readonly moduleSettingsList: ModuleSettings[] = [];
+    private readonly window: BrowserWindow;
+
+    public constructor(ipcCallback: IPCCallback, window: BrowserWindow) {
         super(
+            SettingsProcess.MODULE_ID,
             SettingsProcess.MODULE_NAME,
             SettingsProcess.HTML_PATH,
             ipcCallback);
+        this.window = window;
 
-        this.getSettings().setSettingsName("General");
+        this.getSettings().setName("General");
         this.setModuleInfo({
             moduleName: "General",
             author: "aarontburn",
-            version: "1.0.0",
             description: "General settings.",
-            buildVersion: 1,
-            platforms: []
-        })
+        });
     }
 
-    public registerSettings(): Setting<unknown>[] {
+    public registerSettings(): (Setting<unknown> | string)[] {
         return [
+            "Display",
             new HexColorSetting(this)
                 .setName("Accent Color")
+                .setAccessID("accent_color")
+                .setDescription("Changes the color of various elements.")
                 .setDefault("#2290B5"),
+
+            new NumberSetting(this)
+                .setRange(25, 300)
+                .setStep(10)
+                .setName("Zoom Level")
+                .setDefault(100)
+                .setAccessID('zoom'),
+
+            "Developer",
+            new BooleanSetting(this)
+                .setName("Force Reload Modules at Launch")
+                .setDescription("Always recompile modules at launch. Will result in a slower boot.")
+                .setAccessID("force_reload")
+                .setDefault(false),
         ];
     }
 
-    public refreshSettings(): void {
+    public refreshSettings(modifiedSetting?: Setting<unknown>): void {
+        if (modifiedSetting?.getAccessID() === 'zoom') {
+            const zoom: number = modifiedSetting.getValue() as number;
+            this.window.webContents.setZoomFactor(zoom / 100);
 
-        this.notifyObservers("refresh-settings", this.getSettings().getSettingByName("Accent Color").getValue());
-
+        } else if (modifiedSetting?.getAccessID() === 'accent_color') {
+            this.sendToRenderer("refresh-settings", modifiedSetting.getValue());
+        }
     }
 
     public initialize(): void {
         super.initialize();
 
-
         const settings: any[] = [];
         for (const moduleSettings of this.moduleSettingsList) {
-            const moduleName: string = moduleSettings.getModuleSettingsName();
-            const settingsList: Setting<unknown>[] = moduleSettings.getSettingsList();
+            const moduleName: string = moduleSettings.getName();
 
-            const list: any = {
+            const list: { module: string, moduleInfo: any } = {
                 module: moduleName,
-                moduleInfo: moduleSettings.getParentModule().getModuleInfo(),
-                settings: []
+                moduleInfo: moduleSettings.getModule().getModuleInfo(),
             };
 
-            settingsList.forEach((setting: Setting<unknown>) => {
-
-                const settingBox: SettingBox<unknown> = setting.getUIComponent();
-                const settingInfo: any = {
-                    moduleInfo: setting.parentModule.getModuleInfo(),
-                    settingId: setting.getId(),
-                    inputTypeAndId: settingBox.getInputIdAndType(),
-                    ui: settingBox.getUI(),
-                    style: settingBox.getStyle(),
-                };
-                list.settings.push(settingInfo);
-            });
             settings.push(list);
-            moduleSettings.getParentModule().refreshSettings();
+            moduleSettings.getModule().refreshAllSettings();
         }
 
         // this.refreshSettings();
-        this.notifyObservers("populate-settings-list", settings);
+        this.sendToRenderer("populate-settings-list", settings);
     }
 
     // TODO: Restructure stuff 
     private onSettingChange(settingId: string, newValue?: any): void {
         for (const moduleSettings of this.moduleSettingsList) {
-            const settingsList: Setting<unknown>[] = moduleSettings.getSettingsList();
+            const settingsList: Setting<unknown>[] = moduleSettings.getSettings();
 
             settingsList.forEach((setting: Setting<unknown>) => {
                 const settingBox: SettingBox<unknown> = setting.getUIComponent();
-
                 settingBox.getInputIdAndType().forEach((group: InputElement) => {
                     const id: string = group.id;
                     if (id === settingId) { // found the modified setting
                         if (newValue === undefined) {
-                            setting.resetToDefault()
+                            setting.resetToDefault();
                         } else {
                             setting.setValue(newValue);
                         }
-                        setting.getParentModule().refreshSettings();
+                        setting.getParentModule().refreshSettings(setting);
                         const update: ChangeEvent[] = settingBox.onChange(setting.getValue());
                         StorageHandler.writeModuleSettingsToStorage(setting.getParentModule());
-                        this.notifyObservers("setting-modified", update);
+                        this.sendToRenderer("setting-modified", update);
                         return;
                     }
                 });
@@ -107,11 +119,45 @@ export class SettingsProcess extends Process {
 
     }
 
+    private importModuleArchive() {
+        const options: OpenDialogOptions = {
+            properties: ['openFile'],
+            filters: [{ name: 'Module Archive File', extensions: ['zip', 'tar'] }]
+        };
 
-    public receiveIPCEvent(eventType: string, data: any[]): void {
+        dialog.showOpenDialog(options).then(async (response) => {
+            if (response.canceled) {
+                return;
+            }
+            const filePath: string = response.filePaths[0];
+            const successful: boolean = await ModuleCompiler.importPluginArchive(filePath);
+
+            if (successful) {
+                this.sendToRenderer('import-success');
+                console.log("Successfully copied " + filePath + ". Restart required.");
+            } else {
+                this.sendToRenderer('import-error');
+                console.log("Error copying " + filePath + ".");
+            }
+
+        });
+    }
+
+
+    public handleEvent(eventType: string, data: any[]): void {
         switch (eventType) {
             case "settings-init": {
                 this.initialize();
+                break;
+            }
+
+            case 'import-module': {
+                this.importModuleArchive();
+                break;
+            }
+            case 'restart-now': {
+                app.relaunch();
+                app.exit();
                 break;
             }
 
@@ -119,32 +165,38 @@ export class SettingsProcess extends Process {
                 const moduleName: string = data[0];
 
                 for (const moduleSettings of this.moduleSettingsList) {
-                    const name: string = moduleSettings.getModuleSettingsName();
+                    const name: string = moduleSettings.getName();
 
                     if (moduleName !== name) {
                         continue;
                     }
 
-                    const settingsList: Setting<unknown>[] = moduleSettings.getSettingsList();
+                    const settingsList: (Setting<unknown> | string)[] = moduleSettings.getSettingsAndHeaders();
                     const list: any = {
                         module: moduleName,
-                        moduleInfo: moduleSettings.getParentModule().getModuleInfo(),
+                        moduleInfo: moduleSettings.getModule().getModuleInfo(),
                         settings: []
                     };
 
-                    settingsList.forEach((setting: Setting<unknown>) => {
+                    settingsList.forEach((s: (Setting<unknown> | string)) => {
+                        if (typeof s === 'string') {
+                            list.settings.push(s);
+                            return;
+                        }
+
+                        const setting: Setting<unknown> = s as Setting<unknown>;
                         const settingBox: SettingBox<unknown> = setting.getUIComponent();
                         const settingInfo: any = {
-                            settingId: setting.getId(),
+                            settingId: setting.getID(),
                             inputTypeAndId: settingBox.getInputIdAndType(),
                             ui: settingBox.getUI(),
-                            style: settingBox.getStyle(),
+                            style: [settingBox.constructor.name + 'Styles', settingBox.getStyle()],
                         };
                         list.settings.push(settingInfo);
                     });
 
 
-                    this.notifyObservers('swap-tab', list);
+                    this.sendToRenderer('swap-tab', list);
 
 
                 }
@@ -160,9 +212,17 @@ export class SettingsProcess extends Process {
                 break;
             }
 
-            case 'setting-undo': {
+            case 'setting-reset': {
                 const settingId: string = data[0];
+                console.log("Resetting:" + settingId);
                 this.onSettingChange(settingId);
+
+
+                break;
+            }
+            case 'open-link': {
+                const link: string = data[0];
+                shell.openExternal(link);
 
                 break;
             }
