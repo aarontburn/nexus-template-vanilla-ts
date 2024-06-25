@@ -1,27 +1,51 @@
 /**
- * Renderer process
+ * The renderer. Wrapped in an anonymous function for scoping.
  */
+(() => {
 
-(() => { // Wrapped in an anonymous function for scoping.
-
+    /**
+     *  The ID of the associated module. Must match the process.
+     */
     const MODULE_ID = "developer.Sample_Module";
 
-    const sendToProcess = (eventType: string, ...data: any): void => {
+    /**
+     *  Sends information to the the process.
+     * 
+     *  @param eventType    The name of the event.
+     *  @param data         Any data to send.
+     */
+    const sendToProcess = (eventType: string, ...data: any[]): void => {
         window.parent.ipc.send(MODULE_ID, eventType, ...data);
     }
 
 
-    // Instruct module process to initialize once the renderer is ready.
+    // Instruct the module process to initialize once the renderer is ready.
     sendToProcess("init");
 
 
+    document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
 
-    const defaultModuleID = 'developer.Sample_Module';
-    const defaultModuleName = 'Sample Module'
+    const defaultModuleID: string = 'developer.Sample_Module';
+    const defaultModuleName: string = 'Sample Module';
 
+    /**
+     *  Handle events from the process.
+     */
     window.parent.ipc.on(MODULE_ID, async (_, eventType: string, ...data: any[]) => {
         switch (eventType) {
+            case 'sample-setting': {
+                const bool: boolean = data[0];
+                const html: HTMLElement = document.getElementById('sample-setting');
+
+                html.style.color = bool ? 'green' : 'red';
+                html.innerText = 'Sample setting is turned ' + (bool ? 'on' : 'off');
+                break;
+            }
+
             case 'module-details': {
+                document.getElementById('no-signal-div')?.remove();
+                document.getElementById('successful').style.display = 'flex';
+
                 const obj: { name: string, id: string } = data[0];
                 const name: string = obj.name;
                 const id: string = obj.id;
@@ -49,19 +73,24 @@
                             <td style='vertical-align: top;'><h3>←</td>
                             <td><p>${desc}</p></td>
                         </tr>
-                    `
-                    fileBox.insertAdjacentHTML('beforeend', html)
+                    `;
+                    fileBox.insertAdjacentHTML('beforeend', html);
                 });
-
-
                 break;
             }
 
         }
     });
 
+    /**
+     *  Formats HTML text. 
+     * 
+     *  @param text     The text to color.
+     *  @param color    The color of the text. If undefined, will default to the accent color.
+     *  @returns        The formatted text.
+     */
     function c(text: string, color?: string): string {
-        return `<span ${color ? `style='color: ${color}'` : ''}>${text}</span>`
+        return `<span ${color ? `style='color: ${color}'` : ''}>${text}</span>`;
     }
 
 
@@ -78,23 +107,23 @@
         const output: Map<string, string> = new Map();
         files.forEach(file => {
             const name: string = file.name;
-            let desc: string = "No description set";
+            let desc: string = "Not sure what this file is.";
             if (name.includes('Process')) {
                 if (name.includes('{ModuleName}')) {
-                    desc = `${c("[RENAME]", 'red')} This is the backend of your module. Replace ${c('"{ModuleName}"')}, but ensure it ends with ${c('"{Process}"')}!`;
+                    desc = `${c("[RENAME]", 'red')} This is the backend of your module. Replace ${c('"{ModuleName}"')}, but ensure it ends with ${c('"Process"')}!`;
                 } else {
                     desc = 'This is the backend of your module, where you have access to all Node.js packages, but no access to the DOM.';
                 }
             } else if (name.includes('Renderer')) {
                 if (name.includes('{ModuleName}')) {
-                    desc = `${c("[RENAME]", 'red')} This is the "frontend's-backend" of the module. Replace ${c('"{ModuleName}"')}, but ensure it ends with ${c('"{Renderer}"')}!`;
+                    desc = `${c("[RENAME]", 'red')} This is the "frontend's-backend" of the module. Replace ${c('"{ModuleName}"')}, but ensure it ends with ${c('"Renderer"')}!`;
                 } else {
                     desc = `This is the "frontend's-backend". This has access to the DOM, but no access to Node.js packages.`;
                 }
             } else if (name.includes('.css')) {
                 const html: { name: string, path: string } = getFile('.html');
                 if (name.includes('{ModuleName}')) {
-                    desc = `${c("[RENAME]", 'red')} The styling for the HTML. Rename this, and make sure you modify head of the the HTML file ${html ? `(${c(`"${html.name}"`)})` : ''} to properly update it.`;
+                    desc = `${c("[RENAME]", 'red')} The styling for the HTML. Rename this, and make sure you modify head of the HTML file ${html ? `(${c(`"${html.name}"`)})` : ''} to properly update it.`;
                 } else {
                     desc = `The styling for the HTML.`;
                 }

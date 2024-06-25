@@ -1,1 +1,8 @@
-{"module_name":"Sample Module","author":"developer name","version":"1.0.0","description":"A sample module to quickly start developing modules.","build_version":80,"platforms":[]}
+{
+    "module_name": "Sample Module",
+    "author": "Developer Name",
+    "version": "1.0.0",
+    "description": "A sample module to quickly start developing modules.",
+    "build_version": 1,
+    "platforms": []
+}
