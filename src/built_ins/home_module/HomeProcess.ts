@@ -1,9 +1,9 @@
 import * as path from "path";
-import { IPCCallback } from "../../sample_module/module_builder/IPCObjects";
-import { Process } from "../../sample_module/module_builder/Process";
-import { Setting } from "../../sample_module/module_builder/Setting";
-import { NumberSetting } from "../../sample_module/module_builder/settings/types/NumberSetting";
-import { StringSetting } from "../../sample_module/module_builder/settings/types/StringSetting";
+import { IPCCallback } from "../../developer.Sample_Module/module_builder/IPCObjects";
+import { Process } from "../../developer.Sample_Module/module_builder/Process";
+import { Setting } from "../../developer.Sample_Module/module_builder/Setting";
+import { NumberSetting } from "../../developer.Sample_Module/module_builder/settings/types/NumberSetting";
+import { StringSetting } from "../../developer.Sample_Module/module_builder/settings/types/StringSetting";
 
 
 
@@ -11,7 +11,7 @@ export class HomeProcess extends Process {
 	public static readonly MODULE_NAME: string = "Home";
 	public static readonly MODULE_ID: string = 'built_ins.Home';
 
-	private static readonly HTML_PATH: string = path.join(__dirname, "./HomeHTML.html").replace('dist', 'src');
+	private static readonly HTML_PATH: string = path.join(__dirname, "./HomeHTML.html");
 
 
 	private static readonly LOCALE: string = "en-US";
@@ -54,10 +54,11 @@ export class HomeProcess extends Process {
 		this.updateDateAndTime(false);
 
 		this.clockTimeout = setTimeout(() => this.updateDateAndTime(true), 1000 - new Date().getMilliseconds());
+		
 	}
 
-	public stop(): void {
-		super.stop();
+	public onExit(): void {
+		super.onExit();
 		clearTimeout(this.clockTimeout);
 	}
 
@@ -150,7 +151,7 @@ export class HomeProcess extends Process {
 				abbrDate: this.getSettings().getSetting('abbr_date_fs').getValue(),
 				standardTime: this.getSettings().getSetting('standard_time_fs').getValue(),
 				militaryTime: this.getSettings().getSetting('military_time_fs').getValue()
-			}
+			};
 			this.sendToRenderer('font-sizes', sizes);
 		} else if (modifiedSetting?.getAccessID() === 'display_order') {
 			const order: string = this.getSettings().getSetting("display_order").getValue() as string
