@@ -234,10 +234,9 @@ export class ModuleController implements IPCSource {
 
 
     private addModule(module: Process): void {
-        const map: Map<string, Process> = new Map();
         const moduleID: string = module.getIPCSource();
 
-        const existingIPCProcess: Process = map.get(moduleID);
+        const existingIPCProcess: Process = this.modulesByIPCSource.get(moduleID);
         if (existingIPCProcess !== undefined) {
             console.error("WARNING: Modules with duplicate IDs have been found.");
             console.error(`ID: ${moduleID} | Registered Module: ${existingIPCProcess.getName()} | New Module: ${module.getName()}`);

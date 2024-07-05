@@ -14,7 +14,7 @@
      *  @param eventType    The name of the event.
      *  @param data         Any data to send.
      */
-    const sendToProcess = (eventType: string, ...data: any[]): Promise<any> => {
+    function sendToProcess(eventType: string, ...data: any[]): Promise<any> {
         return window.parent.ipc.send(MODULE_ID, eventType, ...data);
     }
 
