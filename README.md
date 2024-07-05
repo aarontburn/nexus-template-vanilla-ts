@@ -1,3 +1,4 @@
+
 # Modules: Developer Quickstart Template
 Author: [@aarontburn](https://github.com/aarontburn)  
 Module template required for [modules](https://github.com/aarontburn/modules)
@@ -5,86 +6,89 @@ Module template required for [modules](https://github.com/aarontburn/modules)
 # Template Installation
 To start, clone the template and do 
 ```
-    npm install
+npm install
 ```
 to install any required packages.
 
 # Getting Started
-![image](https://github.com/aarontburn/modules-module_develop/assets/103211131/a5770453-b34a-42f1-9e67-3a9c9347e922)
+![image](https://github.com/aarontburn/modules-module-quickstart/assets/103211131/1599588a-2ef2-44fd-a828-1e922de6dc99)
 
-This is what the initial template should look like. All assets related to your module should remain within the `sample_module` directory.
+This is what the initial template should look like. All assets related to your module should remain within the `developer.Sample_Module` directory.
 
 Do not modify the contents of `module_builder` or any other files, as those changes will not be saved when used in the main application.
 
 ## @Annotations
 Inspired by Java's Annotations, several locations in the template have an @annotation before it. These annotations **must be present to properly compile your plugin.**
 
-All required annotations are already in the template; you shouldn't need to add any additional ones. 
+All required annotations are **already** in the template; you do not need to add any additional ones. 
 
 
 Example 1: [{MODULE_NAME}HTML.html](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DHTML.html)
 ```
-    ...
-    <!-- @css -->
-    <link rel="stylesheet" href="../../colors.css">
-    ...
+...
+<!-- @css -->
+<link rel="stylesheet" href="../../colors.css">
+...
 ```
 
 Example 2: [{MODULE_NAME}Process.ts](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DProcess.ts)  
 
 ```
-    ...
-    // Modify this to match the path of your HTML file.
-    /** @htmlpath */
-    private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
-    ...
+...
+// Modify this to match the path of your HTML file.
+/** @htmlpath */
+private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
+...
 ```
 When compiling your module, the main application will look for the @annotations and, when found, will directly modify the next line. This means, unless specified, the line directly under an @annotation **must remain on a single line.**
 
-Valid HTML, but will break compiling:
+This is valid HTML, BUT will break compiling:
 ```
-    ...
-    <!-- @css -->
-    <link 
-        rel="stylesheet" 
-        href="../../colors.css">
-    ...
+...
+<!-- @css -->
+<link 
+    rel="stylesheet" 
+    href="../../colors.css">
+...
 ```
 
 
 ## Renaming
+Create a module ID.
+A standard way to create an ID would `{yourName}.{Module_Name}`. For example, the [Volume Controller](https://github.com/aarontburn/modules-volume_controller) module has a module ID of `aarontburn.Volume_Controller`. 
+
+
 To be safe, rename all `{MODULE_NAME}` to the same thing.
 
-1. Rename the `sample_module` directory to the name of your module. 
+1. Rename the `developer.Sample_Module` directory to your module ID.
 2. Rename `{MODULE_NAME}.css` to a proper name. **[NOT STRICT]**
 3. Rename `{MODULE_NAME}Renderer.ts` to a proper name.
+\* This file **MUST** end with `Renderer.ts`
 4. Rename `{MODULE_NAME}Process.ts` to a proper name.  
 \* This file **MUST** end with `Process.ts`
 5. Rename `{MODULE_NAME}HTML.html` to a proper name.
 6. In `{MODULE_NAME}HTML.html`, modify the CSS `<link>`  `href`'s location to the name of your CSS file (in step 2).
 ```
-    <!-- Modify this for the name to the name of your CSS file. -->
-    <link rel="stylesheet" href="{MODULE_NAME}.css">
+<!-- Modify this for the name to the name of your CSS file. -->
+<link rel="stylesheet" href="{MODULE_NAME}.css">
 ```
-
-7. In `{MODULE_NAME}HTML.html`, modify the `<script>`'s `src` to point towards your renderer. Rename `sample_module` to the name of the directory (from step 1) and `{MODULE_NAME}Renderer` to the name of your renderer (from step 3).
+7. In `{MODULE_NAME}HTML.html`, modify the `<script>`'s `src` to point towards your renderer. Rename `developer.Sample_Module` to the name of the directory (from step 1) and `{MODULE_NAME}Renderer` to the name of your renderer (from step 3).
 
 ```
-    <!-- Note: This script tag NEEDS to stay a single line. -->
-    <!-- @renderer -->
-    <script defer src="../../dist/sample_module/{MODULE_NAME}Renderer.js"></script>
+<!-- Note: This script tag NEEDS to stay a single line. -->
+<!-- @renderer -->
+<script defer src="../../dist/sample_module/{MODULE_NAME}Renderer.js"></script>
 ```
 
 8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH` variable to point towards your HTML file (from step 5).
 ```
-    // Modify this to the name of your module.
-    private static MODULE_NAME = "{MODULE_NAME}"; // MUST MATCH RENDERER
+// Modify this to the name of your module.
+private static MODULE_NAME = "{MODULE_NAME}"; // MUST MATCH RENDERER
 
-    // Modify this to match the path of your HTML file.
-    /** @htmlpath */
-    private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
+// Modify this to match the path of your HTML file.
+/** @htmlpath */
+private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
 ```
-
 9. In `{MODULE_NAME}Renderer.ts`, modify the `MODULE_NAME` variable to EXACTLY what you modifed the `MODULE_NAME` variable in step 8.
 ```
     // Change this to EXACTLY what is in the {MODULE_NAME}Module.MODULE_NAME field.
