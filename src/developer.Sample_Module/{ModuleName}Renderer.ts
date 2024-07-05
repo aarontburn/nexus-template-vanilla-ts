@@ -6,7 +6,7 @@
     /**
      *  The ID of the associated module. Must match the process.
      */
-    const MODULE_ID = "developer.Sample_Module";
+    const MODULE_ID: string = "developer.Sample_Module";
 
     /**
      *  Sends information to the the process.
@@ -14,8 +14,8 @@
      *  @param eventType    The name of the event.
      *  @param data         Any data to send.
      */
-    const sendToProcess = (eventType: string, ...data: any[]): void => {
-        window.parent.ipc.send(MODULE_ID, eventType, ...data);
+    const sendToProcess = (eventType: string, ...data: any[]): Promise<any> => {
+        return window.parent.ipc.send(MODULE_ID, eventType, ...data);
     }
 
 
@@ -27,6 +27,7 @@
 
     const defaultModuleID: string = 'developer.Sample_Module';
     const defaultModuleName: string = 'Sample Module';
+    const defaultModuleDir: string = 'developer.Sample_Module';
 
     /**
      *  Handle events from the process.
@@ -46,12 +47,11 @@
                 document.getElementById('no-signal-div')?.remove();
                 document.getElementById('successful').style.display = 'flex';
 
-                const obj: { name: string, id: string } = data[0];
-                const name: string = obj.name;
-                const id: string = obj.id;
+                const { name, id, folderName } = data[0];
 
                 document.getElementById('module-name').innerText = name;
                 document.getElementById('module-id').innerText = id;
+                document.getElementById('module-directory').innerText = folderName;
 
                 if (name === defaultModuleName) {
                     document.getElementById('name-default-warning').hidden = false;
@@ -59,6 +59,7 @@
                 if (id === defaultModuleID) {
                     document.getElementById('id-default-warning').hidden = false;
                 }
+
                 break;
             }
             case 'files': {

@@ -9,8 +9,8 @@ import { BooleanSetting } from "./module_builder/settings/types/BooleanSetting";
 
 export class SampleModuleProcess extends Process {
 
-    private static readonly MODULE_NAME = "Sample Module";
-    private static readonly MODULE_ID = "developer.Sample_Module";
+    private static readonly MODULE_NAME: string = "Sample Module";
+    private static readonly MODULE_ID: string = "developer.Sample_Module";
 
     /** @htmlpath */
     private static readonly HTML_PATH: string = path.join(__dirname, "./{ModuleName}HTML.html").replace("dist", "src");
@@ -28,7 +28,7 @@ export class SampleModuleProcess extends Process {
 
         setTimeout(() => {
             if (!this.isInitialized()) {
-                console.error("Error: has not received signal from renderer. Verify the MODULE_ID matches the renderers.")
+                console.error("Error: has not received signal from renderer. Verify the MODULE_ID matches the renderers.");
                 console.error("\tListening to: " + SampleModuleProcess.MODULE_ID);
             }
         }, 3000);
@@ -43,7 +43,8 @@ export class SampleModuleProcess extends Process {
 
         this.sendToRenderer('module-details', {
             name: SampleModuleProcess.MODULE_NAME,
-            id: SampleModuleProcess.MODULE_ID
+            id: SampleModuleProcess.MODULE_ID,
+            folderName: __dirname.split("\\").at(-1)
         });
 
         fs.promises.readdir(__dirname, { withFileTypes: true }).then((files: fs.Dirent[]) => {
