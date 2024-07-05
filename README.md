@@ -1,4 +1,5 @@
 
+
 # Modules: Developer Quickstart Template
 Author: [@aarontburn](https://github.com/aarontburn)  
 Module template required for [modules](https://github.com/aarontburn/modules)
@@ -17,206 +18,186 @@ This is what the initial template should look like. All assets related to your m
 
 Do not modify the contents of `module_builder` or any other files, as those changes will not be saved when used in the main application.
 
-## @Annotations
-Inspired by Java's Annotations, several locations in the template have an @annotation before it. These annotations **must be present to properly compile your plugin.**
+## Renaming everything
+Create a module ID and module name.
+: A normalized way to create a module ID would `{companyName}.{Module_Name}`.
+> As an example, let's say our company name is `aarontburn` and our we are creating a system volume controller.
+>>Module Name: Volume Controller
+>>Module ID: aarontburn.Volume_Controller
 
-All required annotations are **already** in the template; you do not need to add any additional ones. 
-
-
-Example 1: [{MODULE_NAME}HTML.html](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DHTML.html)
-```
-...
-<!-- @css -->
-<link rel="stylesheet" href="../../colors.css">
-...
-```
-
-Example 2: [{MODULE_NAME}Process.ts](https://github.com/aarontburn/modules-module_develop/blob/main/src/sample_module/%7BMODULE_NAME%7DProcess.ts)  
-
-```
-...
-// Modify this to match the path of your HTML file.
-/** @htmlpath */
-private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
-...
-```
-When compiling your module, the main application will look for the @annotations and, when found, will directly modify the next line. This means, unless specified, the line directly under an @annotation **must remain on a single line.**
-
-This is valid HTML, BUT will break compiling:
-```
-...
-<!-- @css -->
-<link 
-    rel="stylesheet" 
-    href="../../colors.css">
-...
-```
-
-
-## Renaming
-Create a module ID.
-A standard way to create an ID would `{yourName}.{Module_Name}`. For example, the [Volume Controller](https://github.com/aarontburn/modules-volume_controller) module has a module ID of `aarontburn.Volume_Controller`. 
-
-
-To be safe, rename all `{MODULE_NAME}` to the same thing.
-
+To be safe, rename all `{ModuleName}`s to the same thing.
 1. Rename the `developer.Sample_Module` directory to your module ID.
-2. Rename `{MODULE_NAME}.css` to a proper name. **[NOT STRICT]**
-3. Rename `{MODULE_NAME}Renderer.ts` to a proper name.
+> Directory: `developer.Sample_Module` → `aarontburn.Volume_Controller`  
+2. Rename `{ModuleName}.css` to a suitable name.
+> `{ModuleName}.css` → `VolumeController.css`
+3. Rename `{ModuleName}Renderer.ts` to a suitable name.
 \* This file **MUST** end with `Renderer.ts`
-4. Rename `{MODULE_NAME}Process.ts` to a proper name.  
+> `{ModuleName}Renderer.ts` → `VolumeControllerRenderer.ts`
+4. Rename `{ModuleName}Process.ts` to a suitable name.  
 \* This file **MUST** end with `Process.ts`
-5. Rename `{MODULE_NAME}HTML.html` to a proper name.
-6. In `{MODULE_NAME}HTML.html`, modify the CSS `<link>`  `href`'s location to the name of your CSS file (in step 2).
-```
-<!-- Modify this for the name to the name of your CSS file. -->
-<link rel="stylesheet" href="{MODULE_NAME}.css">
-```
-7. In `{MODULE_NAME}HTML.html`, modify the `<script>`'s `src` to point towards your renderer. Rename `developer.Sample_Module` to the name of the directory (from step 1) and `{MODULE_NAME}Renderer` to the name of your renderer (from step 3).
-
-```
-<!-- Note: This script tag NEEDS to stay a single line. -->
-<!-- @renderer -->
-<script defer src="../../dist/sample_module/{MODULE_NAME}Renderer.js"></script>
-```
-
-8. In `{MODULE_NAME}Process.ts`, modify the `MODULE_NAME` variable to the name of your module and the `HTML_PATH` variable to point towards your HTML file (from step 5).
-```
-// Modify this to the name of your module.
-private static MODULE_NAME = "{MODULE_NAME}"; // MUST MATCH RENDERER
-
-// Modify this to match the path of your HTML file.
-/** @htmlpath */
-private static HTML_PATH: string = path.join(__dirname, "./{MODULE_NAME}HTML.html").replace("dist", "src");
-```
-9. In `{MODULE_NAME}Renderer.ts`, modify the `MODULE_NAME` variable to EXACTLY what you modifed the `MODULE_NAME` variable in step 8.
-```
-    // Change this to EXACTLY what is in the {MODULE_NAME}Module.MODULE_NAME field.
-    const MODULE_NAME = "{MODULE_NAME}" // MUST MATCH PROCESS
-```
-
-10. In `ModuleController.ts`, modify the `import` statement to properly import your `{MODULE_NAME}Process.ts` file.
-```
-    // Update this import statement
-    import { SampleProcess } from "./sample_module/{MODULE_NAME}Process";
-```
+> `{ModuleName}Process.ts` → `VolumeControllerProcess.ts`
+5. Rename `{ModuleName}HTML.html` to a proper name.
+> `{ModuleName}HTML.html` → `VolumeControllerHTML.html`
+6. In `{ModuleName}HTML.html`, modify the CSS `<link>`  `href`'s location to the name of your CSS file (in step 2).
+	```
+	<!-- Modify this for the name to the name of your CSS file. -->
+	<link rel="stylesheet" href="./{MODULE_NAME}.css">
+	```
+	
+	>  ```
+	>	<!-- Modify this for the name to the name of your CSS file. -->
+	>	<link rel="stylesheet" href="./VolumeController.css">
+	>	```
+7. In `{ModuleName}HTML.html`, modify the `<script>`'s `src` to point towards your renderer.
+	> It's not DIRECTLY pointing to your renderer, but it will after compilation.
+		
+	```
+	<!-- Note: This script tag NEEDS to stay a single line. -->
+	<!-- @renderer -->
+	<script defer src="./{MODULE_NAME}Renderer.js"></script>
+	```
+	
+	> ```
+	> <!-- Note: This script tag NEEDS to stay a single line. -->
+	> <!-- @renderer -->
+	> <script defer src="./VolumeControllerRenderer.js"></script>
+	> ```
+9. In `{ModuleName}Process.ts`, modify the `MODULE_NAME`, `MODULE_ID`, and `HTML_PATH` variables. Rename the class declaration to the name of the file. 
+	```
+	// {ModuleName}Process.ts
+	...
+	export class SampleModuleProcess extends Process {
+		private static readonly MODULE_NAME: string = "Sample Module";
+		private static readonly MODULE_ID: string = "developer.Sample_Module";
+		private static readonly HTML_PATH: string = path.join(__dirname, "./{ModuleName}HTML.html");
+	...
+	```
+	> ```
+	> // VolumeControllerProcess.ts
+	> ...
+	> export class VolumeControllerProcess extends Process {
+		> 	private static readonly MODULE_NAME: string = "Volume Controller";
+		> 	private static readonly MODULE_ID: string = "aarontburn.Volume_Controller";
+		> 	private static readonly HTML_PATH: string = path.join(__dirname, "./VolumeControllerHTML.html");
+		>...
+	> ```
+10. In `{ModuleName}Renderer.ts`, modify `MODULE_ID`.
+	```
+	// {ModuleName}Renderer.ts
+	...
+	const MODULE_ID: string = "developer.Sample_Module";
+	...
+	```
+	> ```
+	> // VolumeControllerRenderer.ts
+	>...
+	> const MODULE_ID: string = "aarontburn.Volume_Controller";
+	> ...
+	> ```
+	
 
 ## Running the application
-After modifying the specified files, you should be ready to start developing your module. 
+After modifying the files, you should be ready to start developing your module. 
 
-In the terminal, execute the command:
+In the terminal, run the command:
 ```
-    npm start
+npm start
 ```
-![image](https://github.com/aarontburn/modules-module_develop/assets/103211131/4aff1dc8-d286-4414-a57f-6b408f3903ed)  
-If no exceptions are thrown, and the terminal looks similar to this, you have correctly installed and renamed things.
+
+  
+If no exceptions are thrown in the console, you have correctly installed and renamed things.
 
 
 # Developing your Module
-## Quick Tips:
-1. Electron is Chromium based. That means you have access to the Chrome Developer tools, either through the menu bar (`View > Toggle Developer Tools`), or by keyboard shortcut (`CTRL + SHIFT + I`)
+## Understanding Electron
+As this platform is utilizes Electron, you must abide by some of their design principles, the main one being context-isolation and IPC. 
 
+For safety reasons, Electron uses context-isolation to isolate the process and renderer. The process has full access to Node.js packages, but no access to the DOM. The renderer is the opposite; is no access to Node.js packages but full access to the DOM. This also means that you are unable to use `import` or `require` in the renderer.
+
+In order to communicate between them, Electron offers [Inter-Process Communication (IPC)](https://www.electronjs.org/docs/latest/tutorial/ipc). It is important to understand what you can send, but the process to send and receive information has been streamlined in the code.
 
 ## Module Structure
-Each module consists of a few required files:
-- Process: The "main" of your module. Serves as the backend and is what connects the main application to your module.
-- Renderer: The frontend of your module. In an isolated context and only handles DOM manipulation.
-- HTML: The structure of your frontend.
-- CSS: Styling for the HTML (not technically required but added for ease of development)
+Each module consists of a -
+- **Process**: The "main" of your module. This is also the object that is directly connected to the platform.
+- **Renderer**: The frontend of your module. In an isolated context and only handles DOM manipulation.
+- **HTML**: The structure of your frontend.
+- **CSS**: Styling for the HTML.
 
 
-## Process Structure `{MODULE_NAME}Process.ts`
+## Process Structure
 The process file is the backend of your module. It has full access to Node packages. It does not have direct access to the frontend - you will need to communicate and send data to the frontend and do the updating there.
 
 All `console.log()` will output to the terminal.
 
+### Important Functions
 
-## Renderer Structure `{MODULE_NAME}Renderer.ts`
-The renderer file is the frontend of your module. It has **NO ACCESS** to Node packages, including `require` or `import`.
+#### Constructor
+The only thing the constructor needs is the call to `super()`. Do not add logic that is important to your module here; treat the `initialize()` function as the main entry point.
+
+#### initialize()
+The entry point of your module. This function is called once the renderer is ready sends back an `init` signal.
+
+#### handleEvent(eventType: string, data: any[])
+This function is responsible for dealing with information sent from the renderer.
+
+**eventType**: *string* → The name of the event. Use a switch-case or if-statement to distinguish between events.  
+
+**data**: *any[]* → Any data sent from the renderer. If no data is sent, will be an empty array.
+
+#### sendToRenderer(eventType: string, ...data: any[])
+This function is responsible for sending information to the renderer.
+
+**eventType**: *string* → The name of the event.
+**data**: *any[]* → Any data to be sent. See Electrons [Object Serialization](https://www.electronjs.org/docs/latest/tutorial/ipc#object-serialization) to verify if your data can be properly sent.
+
+For more details about the process functions, see the Process guide. // Add link here
+	
+## Renderer Structure 
+The renderer file is the frontend of your module. It has **NO ACCESS** to Node packages, including `require` or `import`. To deal with scoping, the entire renderer is encased in an anonymous function. 
 
 It does have access to the DOM. You should send data from the process, receive it in the renderer, and use that information to update the frontend. 
 
 All `console.log()` will output to the developer console.
 
+#### sendToProcess(eventType: string, ...data: any[]): Promise<any>
+This pre-defined function is the method of sending information back to the process. 
 
-## Communicating Between the Processs and Renderer
-Electron uses Inter-Process Communication (IPC) to communicate between the process and renderer. There are pre-defined functions in both the process and renderer files to simplify this process.
+**eventType**: *string* → The name of the event.
+**data**: *any[]* → Any data to send back to the process. See Electrons [Object Serialization](https://www.electronjs.org/docs/latest/tutorial/ipc#object-serialization) to verify if your data can be properly sent.
 
-### Process
-#### Sending an event TO the renderer
-```
-    public notifyObservers(eventType: string, ...data: any): void { ... }
-    
-    this.notifyObservers("{EVENT_NAME}", {EVENT_DATA_1}, {EVENT_DATA_2}, ...);
-```
-This function is used by the process to communicate to the renderer.  
+# moduleinfo.json
+Bundled with your module should be a file named `moduleinfo.json` which contains information about your module. This information will be displayed in the Settings module.
 
-`eventType`: A name for the event.  
-`...data`: Data to send to the renderer, if any.
-
-#### Receiving an event FROM the renderer
-```
-    public receiveIPCEvent(eventType: string, data: any[]): void {
-        switch (eventType) {
-            case "init": {
-                this.initialize();
-                break;
-            }
-            case "sample_event_from_renderer": {
-                console.log("Received from renderer: " + data);
-                break;
-            }
-
-        }
-    }
-```
-
-This function receives events from the renderer.  
-`eventType`: The name of the event.  
-`data`: All data passed from the renderer, if any.
-
-### Renderer
-#### Sending an event TO the process
-```
-    const sendToProcess = (eventType: string, ...data: any): void => { }
-    
-    sendToProcess("sample_event_from_renderer", "sample data 1", "sample data 2");
+![image](https://github.com/aarontburn/modules-module-quickstart/assets/103211131/37b22e3a-3efe-443e-a2df-c72b25af89cd)
 
 ```
-#### Receiving an event FROM the process
+// moduleinfo.json
+{
+	"module_name": "Sample Module",
+	"author": "Developer Name",
+	"version": "1.0.0",
+	"description": "A sample module to quickly start developing modules.",
+	"build_version": 1,
+	"platforms": [],
+	"link": "https://github.com/aarontburn/modules-module-quickstart"
+}
 ```
-    window.parent.ipc.on(MODULE_RENDERER_NAME, (_, eventType: string, data: any[]) => {
-        data = data[0]; // Data is wrapped in an extra array.
-        switch (eventType) {
-            case "sample_event": {
-                console.log("Received from process: " + data);
-                sendToProcess("sample_event_from_renderer", "sample data 1", "sample data 2");
-                break;
-            }
-        }
-    });
-```
+Many fields are self-explanatory.
+
+**build_version** → An internal counter that will not be displayed. This number is incremented each time your module is exported using `npm run export` so that the platform knows to recompile your module.
+
+platforms → An array of platforms that your module
 
 
 # Exporting your Module
-After you finish developing your module, you may export it using an included Python script.
+After you finish developing your module, you will need to export it to distribute it. 
 
-`EXPORT.py` is a script to export your module and its dependencies. Open the script in an editor.
-
+In the terminal, run the command:
 ```
-...
-
-"""
-Usage Information:
-Change this to the name of the folder containing your module
-"""
-FOLDER_NAME = 'sample_module' # Change this to the name of the folder containing your module
-
-...
+npm run export
 ```
-`FOLDER_NAME` is the only thing needed for the script to locate the required files; modify it to be the name of the folder your module lives in ([from step 1 of renaming](#renaming)).
+This will open a file dialog where you can choose the location to export your module. 
 
-Running this script will produce a new directory `output/`, which should contain a folder with an identical name to `FOLDER_NAME`. Inside are all of the files needed, alongside `node_modules/` if you used external packages, and an empty directory `module_builder` which is needed by the compiler.
+Assuming you followed the provided naming scheme, your module will be exported as `<moduleID>.zip` (for example, the Volume Controller is exported as `aarontburn.Volume_Controller.zip`)
 
-Drag this folder to `{HOME_PATH}/.modules/external_modules/`.
-
+That's it! Your module is exported. If you utilized any dependencies, they will automatically be bundled into your exported module inside the `node_modules` folder, including all parent dependencies. You can now distribute this archive file.
