@@ -24,6 +24,7 @@ export class SampleModuleProcess extends Process {
             SampleModuleProcess.HTML_PATH,
             ipcCallback);
 
+        // Verify the module has been initialized. Can be removed.
         setTimeout(() => {
             if (!this.isInitialized()) {
                 console.error("Error: has not received signal from renderer. Verify the MODULE_ID matches the renderers.");
