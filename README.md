@@ -1,6 +1,3 @@
-
-
-
 # Modules: Developer Quickstart Template
 [@aarontburn](https://github.com/aarontburn)  
 Module template for [Modules](https://github.com/aarontburn/modules)
@@ -154,7 +151,7 @@ This function is responsible for sending information to the renderer.
 **eventType**: *string* → The name of the event.
 **data**: *any[]* → Any data to be sent. See Electrons [Object Serialization](https://www.electronjs.org/docs/latest/tutorial/ipc#object-serialization) to verify if your data can be properly sent.
 
-For more details about the process functions, see the Process guide. // Add link here
+For more details about the process functions, see the [Process guide](https://github.com/aarontburn/modules-module-quickstart/blob/main/docs/Process.md).
 	
 ## Renderer Structure 
 The renderer file is the frontend of your module. It has **NO ACCESS** to Node packages, including `require` or `import`. To deal with scoping, the entire renderer is encased in an anonymous function. 
