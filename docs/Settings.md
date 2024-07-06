@@ -11,7 +11,7 @@ Module settings are defined in the Process file, in the required function `regis
 
 # Table of Contents
 
-1. [`Setting<T>` Class](#setting-class)
+1. [`Setting` Class](#setting-class)
 
 
 
