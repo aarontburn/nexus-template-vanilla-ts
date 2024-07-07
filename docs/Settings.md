@@ -6,17 +6,75 @@ Guide for [Modules](https://github.com/aarontburn/modules)
 # All Things Settings
 The _Modules_ platform aims to streamline the creation of any module, including the management of settings. This portion of the documentation hopes to explain the various setting types and their use cases.
 
-Module settings are defined in the Process file, in the required function `registerSettings`.
+All _modules_ will have their settings handled by the built-in Settings module.
 
 
 # Table of Contents
 
-1. [`Setting` Class](#setting-class)
+1. [The `Setting` Class](#the-setting-class)
 
 
 
 
-# `Setting` Class
+# Getting Started
+
+The `Process` API aims to streamline the creation and management of your modules' settings.
+
+
+#### `registerSettings(): (Setting<unknown> | string)[]`
+All modules have use this function to register settings for their module. If your module doesn't depend on any settings, this can simply return an empty array. Otherwise, you can easily create settings by adding a `Setting` object to the array.
+
+## Example
+```
+public registerSettings(): (Setting<unknown> | string)[] {
+  return [
+    new BooleanSetting(this)
+      .setDefault(false)
+      .setName("Sample Toggle Setting")
+      .setDescription("An example of a boolean setting!")
+      .setAccessID('sample_bool'),
+  ]
+}
+```
+This sample code will result in a UI such as:
+
+![image](https://github.com/aarontburn/modules-module-quickstart/assets/103211131/ae75ef8e-2390-4c96-92ad-01b5f9e003e6)
+
+In the `registerSettings` function, we simply return an array that has a `BooleanSetting`, which is a descendent of the `Setting` parent class, and specify certain parameters.
+
+There are **two required parameters**, those of which being the **setting name** and **default value**. However, there are several optional parameters that can help access or modify your setting. See the [Setting class](#the-setting-class) section for more details.
+
+
+
+
+# Accessing a setting within the `Process`
+
+Within your Process class, all settings are stored within the `ModuleSettings` class. 
+
+
+### Internal Summary
+When a setting is added to this object via the `_addSetting` or `_addSettings` function, they are indexed by their `name` and their `accessID` (if applicable),  
+
+
+
+#### `this.getSettings(): ModuleSettings`
+is the function used to access this class. This class has a couple functions.
+
+
+## `ModuleSettings` Class
+
+#### `getSetting(nameOrID: string): Setting<unknown>`
+
+The standard 
+
+
+
+
+
+
+# The `Setting` Class
+
+This parent class encapsulates all behavior required for each setting.
 
 ### Functions
 
