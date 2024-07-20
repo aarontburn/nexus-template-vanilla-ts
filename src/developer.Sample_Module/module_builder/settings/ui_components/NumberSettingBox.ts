@@ -27,6 +27,7 @@ export class NumberSettingBox extends SettingBox<number> {
             <div class="left-component">
                 <input type="number" style="width: 110px; text-align: center;"
                     id="${this.getSetting().getID()}" value='${this.getSetting().getValue()}'>
+                    
                 ${rangeText !== undefined
                 ? `<p style='line-height: 21px;'>${rangeText}</p>`
                 : ''

@@ -98,8 +98,8 @@ export abstract class Process implements IPCSource {
         this._htmlPath = htmlPath;
         this._ipcCallback = ipcCallback;
 
-        this._moduleSettings.addSettings(this.registerSettings());
-        this._moduleSettings.addInternalSettings(this.registerInternalSettings());
+        this._moduleSettings._addSettings(this.registerSettings());
+        this._moduleSettings._addInternalSettings(this.registerInternalSettings());
     }
 
 
@@ -207,7 +207,7 @@ export abstract class Process implements IPCSource {
      * 
      *  For an example on how to use this, see {@link HomeProcess}
      */
-    public abstract refreshSettings(modifiedSetting?: Setting<unknown>): void;
+    public abstract refreshSettings(modifiedSetting: Setting<unknown>): void;
 
 
     /**
@@ -275,12 +275,12 @@ export abstract class Process implements IPCSource {
      *  @param eventType    The name of the event
      *  @param data         The data sent from the renderer.
      */
-    public abstract handleEvent(eventType: string, ...data: any[]): void | Promise<any>
+    public abstract handleEvent(eventType: string, ...data: any[]): Promise<any>
 
 
     /**
      *  Send an event to the renderer.
-     * 
+     *  
      *  @param eventType    The name of the event.
      *  @param data         The data to send.
      *  @see https://www.electronjs.org/docs/latest/tutorial/ipc#object-serialization
