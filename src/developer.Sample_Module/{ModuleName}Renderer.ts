@@ -23,7 +23,7 @@
     sendToProcess("init");
 
 
-    document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
+    // document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
 
     const defaultModuleID: string = 'developer.Sample_Module';
     const defaultModuleName: string = 'Sample Module';

@@ -34,7 +34,7 @@
                 const headerHtml: HTMLElement = document.getElementById("header");
 
 
-                for (const {moduleName, moduleID, htmlPath} of data) {
+                for (const { moduleName, moduleID, htmlPath } of data) {
                     const moduleView: HTMLElement = document.createElement("iframe");
                     moduleView.id = moduleID;
                     moduleView.setAttribute("src", htmlPath);
@@ -63,6 +63,19 @@
                     });
                     headerHtml.insertAdjacentElement("beforeend", headerButton);
                 }
+
+                document.getElementById("react_button").addEventListener("click", () => {
+                    console.log("sending message");
+                    (document.getElementById("developer.Sample_Module") as HTMLIFrameElement).contentWindow.postMessage("test", '*')
+                })
+
+                window.addEventListener("message", (event: MessageEvent) => {
+                    console.log("Received from react")
+                    console.log(event);
+                    
+                });
+
+
                 break;
             }
             case "swap-modules": {
@@ -80,6 +93,8 @@
 
         document.getElementById(swapToLayoutId).setAttribute("style", IFRAME_DEFAULT_STYLE);
     }
+
+
 
 })()
 
