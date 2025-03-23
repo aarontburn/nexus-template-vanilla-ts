@@ -55,7 +55,7 @@ export class NumberSetting extends Setting<number> {
     public useNonIncrementableUI(): NumberSetting {
         this.useSlider = false;
         this.withoutIncrement = true;
-        this.reInitUI()
+        this.reInitUI();
         return this;
     }
 
@@ -117,6 +117,12 @@ export class NumberSetting extends Setting<number> {
         return this;
     }
 
+    public getStep(): number {
+        return this.step;
+    }
+
+
+
 
     /**
      *  Returns the range. If both the minimum and maximum are
@@ -134,11 +140,6 @@ export class NumberSetting extends Setting<number> {
     }
 
 
-    public getStep(): number {
-        return this.step;
-    }
-
-
     public validateInput(input: any): number | null {
         let value: number;
 
@@ -152,7 +153,7 @@ export class NumberSetting extends Setting<number> {
             try {
                 const parsedValue: number = parseFloat(JSON.stringify(input).replace(/"/g, ''));
                 if (!isNaN(parsedValue)) {
-                    value = Number(parsedValue);
+                    value = Number(parsedValue)
                 } else {
                     return null;
                 }
@@ -160,6 +161,8 @@ export class NumberSetting extends Setting<number> {
                 return null;
             }
         }
+
+
 
 
         const roundedValue = (value: number) => Number(value.toFixed(1));
@@ -184,14 +187,9 @@ export class NumberSetting extends Setting<number> {
     public setUIComponent(): SettingBox<number> {
         if (this.useSlider) {
             return new RangeSettingBox(this);
-
         } else if (this.withoutIncrement) {
             return new NumberSettingBox(this);
         }
-        
         return new IncrementableNumberSettingBox(this);
-    } 
-
-
-
+    }
 }

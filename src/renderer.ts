@@ -64,18 +64,6 @@
                     headerHtml.insertAdjacentElement("beforeend", headerButton);
                 }
 
-                document.getElementById("react_button").addEventListener("click", () => {
-                    console.log("sending message");
-                    (document.getElementById("developer.Sample_Module") as HTMLIFrameElement).contentWindow.postMessage("test", '*')
-                })
-
-                window.addEventListener("message", (event: MessageEvent) => {
-                    console.log("Received from react")
-                    console.log(event);
-                    
-                });
-
-
                 break;
             }
             case "swap-modules": {

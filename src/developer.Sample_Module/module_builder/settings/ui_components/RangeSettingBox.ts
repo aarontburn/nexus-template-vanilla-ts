@@ -18,7 +18,7 @@ export class RangeSettingBox extends NumberSettingBox {
         const setting: NumberSetting = this.getSetting() as NumberSetting;
         const range: { min: number, max: number } = setting.getRange();
         const step: number = setting.getStep();
-        
+
         return `
             <div class="right-component">
                 <div style="display: flex; flex-wrap: wrap">

@@ -35,6 +35,7 @@ export class BooleanSetting extends Setting<boolean> {
             return false;
         }
         return null;
+
     }
 
     public setUIComponent(): SettingBox<boolean> {

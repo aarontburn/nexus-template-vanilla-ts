@@ -11,6 +11,7 @@ import { NumberSettingBox } from "./NumberSettingBox";
  */
 export class IncrementableNumberSettingBox extends NumberSettingBox {
 
+
     public constructor(setting: Setting<number>) {
         super(setting);
     }
