@@ -3,11 +3,11 @@ import * as path from "path";
 import { SettingsProcess } from "./built_ins/settings_module/SettingsProcess";
 import { HomeProcess } from "./built_ins/home_module/HomeProcess";
 import { ModuleCompiler } from "./ModuleCompiler";
-import { IPCSource, IPCCallback } from "./developer.Sample_Module/module_builder/IPCObjects";
-import { ModuleSettings } from "./developer.Sample_Module/module_builder/ModuleSettings";
-import { Process } from "./developer.Sample_Module/module_builder/Process";
-import { Setting } from "./developer.Sample_Module/module_builder/Setting";
-import { StorageHandler } from "./developer.Sample_Module/module_builder/StorageHandler";
+import { StorageHandler } from "module_builder/dist/StorageHandler";
+import { IPCSource, IPCCallback } from "module_builder/dist/IPCObjects";
+import { ModuleSettings } from "module_builder/dist/ModuleSettings";
+import { Process } from "module_builder/dist/Process";
+import { Setting } from "module_builder/dist/Setting";
 
 const WINDOW_DIMENSION: { width: number, height: number } = { width: 1920, height: 1080 };
 

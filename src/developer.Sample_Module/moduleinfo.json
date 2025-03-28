@@ -1,1 +1,9 @@
-{"module_name":"Sample Module","author":"Developer Name","version":"1.0.0","description":"A sample module to quickly start developing modules.","build_version":59,"platforms":[],"link":"https://github.com/aarontburn/modules-module-quickstart"}
+{
+    "module_name": "Sample Module",
+    "author": "Developer Name",
+    "version": "1.0.0",
+    "description": "A sample module to quickly start developing modules.",
+    "build_version": 1,
+    "platforms": [],
+    "link": "https://github.com/aarontburn/modules-module-quickstart"
+}

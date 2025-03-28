@@ -1,9 +1,8 @@
+import { IPCCallback } from "module_builder/dist/IPCObjects";
+import { Process } from "module_builder/dist/Process";
+import { Setting } from "module_builder/dist/Setting";
+import { NumberSetting, StringSetting } from "module_builder/dist/settings/types";
 import * as path from "path";
-import { IPCCallback } from "../../developer.Sample_Module/module_builder/IPCObjects";
-import { Process } from "../../developer.Sample_Module/module_builder/Process";
-import { Setting } from "../../developer.Sample_Module/module_builder/Setting";
-import { NumberSetting } from "../../developer.Sample_Module/module_builder/settings/types/NumberSetting";
-import { StringSetting } from "../../developer.Sample_Module/module_builder/settings/types/StringSetting";
 
 
 

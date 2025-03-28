@@ -1,13 +1,9 @@
 import * as path from "path";
 import * as fs from "fs";
-import { Process } from "./module_builder/Process";
-import { IPCCallback } from "./module_builder/IPCObjects";
-import { Setting } from "./module_builder/Setting";
-import { BooleanSetting } from "./module_builder/settings/types/BooleanSetting";
-import { ChoiceSetting } from "./module_builder/settings/types/ChoiceSetting";
-import { NumberSetting } from "./module_builder/settings/types/NumberSetting";
-import { HexColorSetting } from "./module_builder/settings/types/HexColorSetting";
-import { StringSetting } from "./module_builder/settings/types/StringSetting";
+import { Process } from "module_builder/Process"
+import { IPCCallback } from "module_builder/IPCObjects";
+import { Setting } from "module_builder/Setting";
+import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSetting } from "module_builder/settings/types";
 
 
 
