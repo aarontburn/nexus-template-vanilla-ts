@@ -1,15 +1,14 @@
 import * as path from "path";
 import * as fs from 'fs';
 import { BrowserWindow, OpenDialogOptions, app, dialog, shell } from 'electron';
-import { ModuleSettings } from "module_builder/dist/ModuleSettings";
-import { ModuleInfo, Process } from "module_builder/dist/Process";
-import { IPCCallback, IPCSource } from "module_builder/dist/IPCObjects";
-import { Setting } from "module_builder/dist/Setting";
-import { SettingBox, InputElement, ChangeEvent } from "module_builder/dist/SettingBox";
-import { HexColorSetting, NumberSetting, BooleanSetting } from "module_builder/dist/settings/types";
-import { StorageHandler } from "module_builder/dist/StorageHandler";
 import { ModuleCompiler } from "../../ModuleCompiler";
-
+import { IPCCallback, IPCSource } from "module_builder/dist/IPCObjects";
+import { ModuleSettings } from "module_builder/dist/ModuleSettings";
+import { Process, ModuleInfo } from "module_builder/dist/Process";
+import { Setting } from "module_builder/dist/Setting";
+import { SettingBox, ChangeEvent } from "module_builder/dist/SettingBox";
+import { BooleanSetting, HexColorSetting, NumberSetting } from "module_builder/dist/settings/types";
+import { StorageHandler } from "module_builder/dist/StorageHandler";
 
 export class SettingsProcess extends Process {
     public static readonly MODULE_NAME: string = "Settings";
@@ -17,11 +16,11 @@ export class SettingsProcess extends Process {
 
     private static readonly HTML_PATH: string = path.join(__dirname, "./SettingsHTML.html");
 
-    private readonly moduleSettingsList: ModuleSettings[] = [];
+    private readonly moduleSettingsList: Map<string, ModuleSettings> = new Map();
     private readonly window: BrowserWindow;
 
     private readonly deletedModules: string[] = [];
-    private readonly devModeSubscribers: ((isDev: boolean) => void)[] = [];  
+    private readonly devModeSubscribers: ((isDev: boolean) => void)[] = [];
 
 
     public constructor(ipcCallback: IPCCallback, window: BrowserWindow) {
@@ -139,11 +138,14 @@ export class SettingsProcess extends Process {
             case 'isDeveloperMode': {
                 return this.getSettings().getSetting('dev_mode').getValue() as boolean;
             }
-            case 'onDevModeChanged': {
+            case 'listenToDevMode': {
                 const callback: (isDev: boolean) => void = data[0];
                 this.devModeSubscribers.push(callback);
                 callback(this.getSettings().getSetting('dev_mode').getValue() as boolean);
                 break;
+            }
+            case "getAccentColorColor": {
+                return this.getSettings().getSetting("accent_color").getValue();
             }
 
         }
@@ -155,7 +157,8 @@ export class SettingsProcess extends Process {
         this.sendToRenderer("is-dev", this.getSettings().getSetting('dev_mode').getValue());
 
         const settings: any[] = [];
-        for (const moduleSettings of this.moduleSettingsList) {
+
+        for (const moduleSettings of Array.from(this.moduleSettingsList.values())) {
             const moduleName: string = moduleSettings.getName();
 
             const list: { module: string, moduleInfo: any } = {
@@ -167,17 +170,22 @@ export class SettingsProcess extends Process {
             moduleSettings.getModule().refreshAllSettings();
         }
 
+        // Swap settings and home module so it appears at the top
+        const temp = settings[0];
+        settings[0] = settings[1];
+        settings[1] = temp;
         this.sendToRenderer("populate-settings-list", settings);
     }
 
     // TODO: Restructure stuff 
     private onSettingChange(settingId: string, newValue?: any): void {
-        for (const moduleSettings of this.moduleSettingsList) {
+        for (const moduleSettings of Array.from(this.moduleSettingsList.values())) {
             const settingsList: Setting<unknown>[] = moduleSettings.getSettings();
 
-            settingsList.forEach((setting: Setting<unknown>) => {
+            for (const setting of settingsList) {
                 const settingBox: SettingBox<unknown> = setting.getUIComponent();
-                settingBox.getInputIdAndType().forEach((group: InputElement) => {
+
+                for (const group of settingBox.getInputIdAndType()) {
                     const id: string = group.id;
                     if (id === settingId) { // found the modified setting
                         if (newValue === undefined) {
@@ -185,14 +193,17 @@ export class SettingsProcess extends Process {
                         } else {
                             setting.setValue(newValue);
                         }
+
                         setting.getParentModule().refreshSettings(setting);
+                        console.info(`Setting setting "${setting.getName()}" to ${setting.getValue()}`)
+
                         const update: ChangeEvent[] = settingBox.onChange(setting.getValue());
                         StorageHandler.writeModuleSettingsToStorage(setting.getParentModule());
                         this.sendToRenderer("setting-modified", update);
                         return;
                     }
-                });
-            });
+                }
+            }
         }
 
     }
@@ -253,10 +264,10 @@ export class SettingsProcess extends Process {
                 shell.openPath(path.normalize(StorageHandler.STORAGE_PATH + moduleID)).then(result => {
                     if (result !== '') {
                         throw new Error('Could not find folder: ' + path.normalize(StorageHandler.STORAGE_PATH + moduleID));
-                    } 
+                    }
                 });
 
-                break;  
+                break;
             }
 
             case 'import-module': {
@@ -286,7 +297,7 @@ export class SettingsProcess extends Process {
             case "swap-settings-tab": {
                 const moduleName: string = data[0];
 
-                for (const moduleSettings of this.moduleSettingsList) {
+                for (const moduleSettings of Array.from(this.moduleSettingsList.values())) {
                     const name: string = moduleSettings.getName();
 
                     if (moduleName !== name) {
@@ -333,7 +344,7 @@ export class SettingsProcess extends Process {
 
             case 'setting-reset': {
                 const settingId: string = data[0];
-                console.log("Resetting:" + settingId);
+                console.info("Resetting: " + settingId);
                 this.onSettingChange(settingId);
 
 
@@ -348,8 +359,14 @@ export class SettingsProcess extends Process {
         }
     }
 
-    public addModuleSetting(moduleSettings: ModuleSettings): void {
-        this.moduleSettingsList.push(moduleSettings);
+    public addModuleSetting(module: Process): void {
+        if (this.moduleSettingsList.get(module.getIPCSource()) !== undefined) {
+            return;
+        }
+
+
+        console.log("adding " + module.getIPCSource())
+        this.moduleSettingsList.set(module.getIPCSource(), module.getSettings());
     }
 
 }

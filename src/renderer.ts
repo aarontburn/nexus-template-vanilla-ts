@@ -32,6 +32,8 @@
             case "load-modules": {
                 const moduleHtml: HTMLElement = document.getElementById("modules");
                 const headerHtml: HTMLElement = document.getElementById("header");
+                headerHtml.innerHTML = "";
+                moduleHtml.innerHTML = "";
 
 
                 for (const { moduleName, moduleID, htmlPath } of data) {
@@ -41,6 +43,7 @@
                     moduleView.setAttribute("style", IFRAME_DEFAULT_STYLE);
                     // moduleView.setAttribute("sandbox", SANDBOX_RESTRICTIONS)
                     moduleHtml.insertAdjacentElement("beforeend", moduleView);
+
 
 
                     const headerButton: HTMLElement = document.createElement("button");

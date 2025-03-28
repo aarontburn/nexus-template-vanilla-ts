@@ -52,6 +52,7 @@ export class HomeProcess extends Process {
 		// Start clock
 		this.updateDateAndTime(false);
 
+
 		this.clockTimeout = setTimeout(() => this.updateDateAndTime(true), 1000 - new Date().getMilliseconds());
 		
 	}
@@ -83,6 +84,7 @@ export class HomeProcess extends Process {
 			this.clockTimeout = setTimeout(() => this.updateDateAndTime(true), 1000);
 		}
 	}
+	
 
 	public registerSettings(): (Setting<unknown> | string)[] {
 		return [
