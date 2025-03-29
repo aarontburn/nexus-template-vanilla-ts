@@ -1,7 +1,7 @@
 {
   "name": "modules-template-vanilla-ts",
   "version": "1.0.0",
-  "description": "Developer template to create a module.",
+  "description": "A developer template to create a module using vanilla TS and HTML.",
   "author": "aarontburn",
   "scripts": {
     "build": "tsc && node copyFiles.js --submodule && npm run dev_export",

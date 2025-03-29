@@ -1,9 +1,9 @@
 {
-    "module_name": "Sample Module",
-    "author": "Developer Name",
+    "module_name": "Modules Template: Vanilla TS",
+    "author": "aarontburn",
     "version": "1.0.0",
-    "description": "A sample module to quickly start developing modules.",
+    "description": "A developer template to create a module using vanilla TS and HTML.",
     "build_version": 1,
     "platforms": [],
-    "link": "https://github.com/aarontburn/modules-module-quickstart"
+    "link": "https://github.com/aarontburn/modules-template-vanilla-ts"
 }
