@@ -363,9 +363,6 @@ export class SettingsProcess extends Process {
         if (this.moduleSettingsList.get(module.getIPCSource()) !== undefined) {
             return;
         }
-
-
-        console.log("adding " + module.getIPCSource())
         this.moduleSettingsList.set(module.getIPCSource(), module.getSettings());
     }
 
