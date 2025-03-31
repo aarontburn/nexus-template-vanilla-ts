@@ -1,11 +1,10 @@
 {
   "name": "nexus-template-vanilla-ts",
   "version": "1.0.0",
-  "description": "A developer template to create a module using vanilla TS and HTML.",
+  "description": "A developer template to create a module using vanilla TS and HTML for Nexus.",
   "author": "aarontburn",
   "scripts": {
     "build": "npm run dev_export",
-    "watch": "tsc -w",
     "start": "npm run build && cd node_modules/@nexus/nexus-client && npm start",
     "export": "node node_modules/@nexus/nexus-exporter/exporter.js",
     "dev_export": "node node_modules/@nexus/nexus-exporter/exporter.js --dev",
