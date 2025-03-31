@@ -1,9 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import { Process } from "module_builder/Process"
-import { IPCCallback } from "module_builder/IPCObjects";
-import { Setting } from "module_builder/Setting";
-import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSetting } from "module_builder/settings/types";
+import { IPCCallback, Process, Setting } from "@nexus/nexus-module-builder"
+import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSetting } from "@nexus/nexus-module-builder/settings/types";
 
 
 
