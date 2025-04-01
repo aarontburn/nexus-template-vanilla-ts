@@ -1,5 +1,5 @@
 {
-    "name": "Modules Template: Vanilla TS",
+    "name": "{EXPORTED_MODULE_NAME}",
     "author": "developer",
     "version": "1.0.0",
     "description": "A developer template to create a module using vanilla TS and HTML.",

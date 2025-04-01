@@ -3,12 +3,15 @@ import * as fs from "fs";
 import { IPCCallback, Process, Setting } from "@nexus/nexus-module-builder"
 import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSetting } from "@nexus/nexus-module-builder/settings/types";
 
+// These is replaced to export-config.js.build.id during export. DO NOT MODIFY.
+const MODULE_ID: string = "{EXPORTED_MODULE_ID}";
+const MODULE_NAME: string = "{EXPORTED_MODULE_NAME}";
+
+// ---------------------------------------------------
 
 
 export default class SampleProcess extends Process {
 
-    private static readonly MODULE_NAME: string = "Sample TS Module";
-    private static readonly MODULE_ID: string = "developer.Sample_TS_Module";
     private static readonly HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
     /**
@@ -16,17 +19,13 @@ export default class SampleProcess extends Process {
      *      and should not contain logic relevant to the renderer.
      */
     public constructor(ipcCallback: IPCCallback) {
-        super(
-            SampleProcess.MODULE_ID,
-            SampleProcess.MODULE_NAME,
-            SampleProcess.HTML_PATH,
-            ipcCallback);
+        super(MODULE_ID, MODULE_NAME, SampleProcess.HTML_PATH, ipcCallback);
 
         // Verify the module has been initialized. Can be removed.
         setTimeout(() => {
             if (!this.isInitialized()) {
                 console.error("Error: has not received signal from renderer. Verify the MODULE_ID matches the renderers.");
-                console.error("\tListening to: " + SampleProcess.MODULE_ID);
+                console.error("\tListening to: " + MODULE_ID);
             }
         }, 3000);
     }
@@ -39,8 +38,8 @@ export default class SampleProcess extends Process {
         super.initialize(); // This should be called.
 
         this.sendToRenderer('module-details', {
-            name: SampleProcess.MODULE_NAME,
-            id: SampleProcess.MODULE_ID,
+            name: MODULE_NAME,
+            id: MODULE_ID,
             folderName: __dirname.split("\\").at(-1)
         });
 
