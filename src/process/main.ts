@@ -5,10 +5,10 @@ import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSe
 
 
 
-export default class SampleModuleProcess extends Process {
+export default class SampleProcess extends Process {
 
-    private static readonly MODULE_NAME: string = "Sample Module";
-    private static readonly MODULE_ID: string = "developer.Sample_Module";
+    private static readonly MODULE_NAME: string = "Sample TS Module";
+    private static readonly MODULE_ID: string = "developer.Sample_TS_Module";
     private static readonly HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
     /**
@@ -17,16 +17,16 @@ export default class SampleModuleProcess extends Process {
      */
     public constructor(ipcCallback: IPCCallback) {
         super(
-            SampleModuleProcess.MODULE_ID,
-            SampleModuleProcess.MODULE_NAME,
-            SampleModuleProcess.HTML_PATH,
+            SampleProcess.MODULE_ID,
+            SampleProcess.MODULE_NAME,
+            SampleProcess.HTML_PATH,
             ipcCallback);
 
         // Verify the module has been initialized. Can be removed.
         setTimeout(() => {
             if (!this.isInitialized()) {
                 console.error("Error: has not received signal from renderer. Verify the MODULE_ID matches the renderers.");
-                console.error("\tListening to: " + SampleModuleProcess.MODULE_ID);
+                console.error("\tListening to: " + SampleProcess.MODULE_ID);
             }
         }, 3000);
     }
@@ -39,8 +39,8 @@ export default class SampleModuleProcess extends Process {
         super.initialize(); // This should be called.
 
         this.sendToRenderer('module-details', {
-            name: SampleModuleProcess.MODULE_NAME,
-            id: SampleModuleProcess.MODULE_ID,
+            name: SampleProcess.MODULE_NAME,
+            id: SampleProcess.MODULE_ID,
             folderName: __dirname.split("\\").at(-1)
         });
 

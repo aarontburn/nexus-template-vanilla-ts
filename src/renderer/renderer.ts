@@ -5,7 +5,7 @@
 /**
  *  The ID of the associated module. Must match the process.
  */
-const MODULE_ID: string = "developer.Sample_Module";
+const MODULE_ID: string = "developer.Sample_TS_Module";
 
 /**
  *  Sends information to the the process.
@@ -24,9 +24,9 @@ sendToProcess("init");
 
 document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
 
-const defaultModuleID: string = 'developer.Sample_Module';
-const defaultModuleName: string = 'Sample Module';
-const defaultModuleDir: string = 'developer.Sample_Module';
+const defaultModuleID: string = 'developer.Sample_TS_Module';
+const defaultModuleName: string = 'Sample TS Module';
+const defaultModuleDir: string = 'developer.Sample_TS_Module';
 
 /**
  *  Handle events from the process.
