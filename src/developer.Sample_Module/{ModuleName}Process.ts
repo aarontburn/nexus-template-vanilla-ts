@@ -5,7 +5,7 @@ import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSe
 
 
 
-export class SampleModuleProcess extends Process {
+export default class SampleModuleProcess extends Process {
 
     private static readonly MODULE_NAME: string = "Sample Module";
     private static readonly MODULE_ID: string = "developer.Sample_Module";
