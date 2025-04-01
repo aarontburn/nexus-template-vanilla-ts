@@ -21,7 +21,7 @@ module.exports = {
             },
             {
                 from: "{EXPORTED_MODULE_NAME}",
-                to: "%name",
+                to: "%name%",
                 at: ["./process/main.ts", "./module-info.json"]
             }
         ]
