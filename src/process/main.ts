@@ -9,7 +9,7 @@ export default class SampleModuleProcess extends Process {
 
     private static readonly MODULE_NAME: string = "Sample Module";
     private static readonly MODULE_ID: string = "developer.Sample_Module";
-    private static readonly HTML_PATH: string = path.join(__dirname, "./{ModuleName}HTML.html");
+    private static readonly HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
     /**
      *  The constructor. Should not directly be called, 

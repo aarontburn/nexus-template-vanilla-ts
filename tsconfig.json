@@ -15,6 +15,6 @@
   "include": [
     "src/**/*",
     "renderer.d.ts",
-    "src/main.ts"
+    "src/electron.ts"
   ]
 }
