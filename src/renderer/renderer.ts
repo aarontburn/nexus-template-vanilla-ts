@@ -1,10 +1,4 @@
-// This is auto-replaced during export. DO NOT MODIFY.
-const MODULE_ID: string = "{EXPORTED_MODULE_ID}";
-// ---------------------------------------------------
-// ---------------------------------------------------
-
-
-window.parent.ipc.on(MODULE_ID, (_, eventType: string, data: any[]) => {
+window.parent.ipc.on(window, (_, eventType: string, data: any[]) => {
     handleEvent(eventType, data);
 });
 
@@ -15,7 +9,7 @@ window.parent.ipc.on(MODULE_ID, (_, eventType: string, data: any[]) => {
  *  @param data         Any data to send.
  */
 const sendToProcess = (eventType: string, ...data: any[]): Promise<void> => {
-    return window.parent.ipc.send(MODULE_ID, eventType, data);
+    return window.parent.ipc.send(window, eventType, data);
 }
 
 
@@ -23,7 +17,7 @@ const sendToProcess = (eventType: string, ...data: any[]): Promise<void> => {
 sendToProcess("init");
 
 
-document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
+// document.getElementById('no-signal-id').innerText = 'MODULE_ID: ' + MODULE_ID;
 
 const defaultModuleID: string = 'developer.Sample_TS_Module';
 const defaultModuleName: string = 'Sample TS Module';
