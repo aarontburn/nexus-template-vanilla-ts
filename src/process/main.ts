@@ -1,25 +1,23 @@
 import * as path from "path";
 import * as fs from "fs";
-import { IPCCallback, Process, Setting } from "@nexus/nexus-module-builder"
+import { Process, Setting } from "@nexus/nexus-module-builder"
 import { BooleanSetting, ChoiceSetting, HexColorSetting, NumberSetting, StringSetting } from "@nexus/nexus-module-builder/settings/types";
 
-// These is replaced to export-config.js.build.id during export. DO NOT MODIFY.
+// These is replaced to the ID specified in export-config.js during export. DO NOT MODIFY.
 const MODULE_ID: string = "{EXPORTED_MODULE_ID}";
 const MODULE_NAME: string = "{EXPORTED_MODULE_NAME}";
-
 // ---------------------------------------------------
+const HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
 
 export default class SampleProcess extends Process {
-
-    private static readonly HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
     /**
      *  The constructor. Should not directly be called, 
      *      and should not contain logic relevant to the renderer.
      */
-    public constructor(ipcCallback: IPCCallback) {
-        super(MODULE_ID, MODULE_NAME, SampleProcess.HTML_PATH, ipcCallback);
+    public constructor() {
+        super(MODULE_ID, MODULE_NAME, HTML_PATH);
 
         // Verify the module has been initialized. Can be removed.
         setTimeout(() => {
