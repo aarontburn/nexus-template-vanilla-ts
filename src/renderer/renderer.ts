@@ -4,14 +4,18 @@ const MODULE_ID: string = "{EXPORTED_MODULE_ID}";
 // ---------------------------------------------------
 
 
+window.parent.ipc.on(MODULE_ID, (_, eventType: string, data: any[]) => {
+    handleEvent(eventType, data);
+});
+
 /**
  *  Sends information to the the process.
  * 
  *  @param eventType    The name of the event.
  *  @param data         Any data to send.
  */
-function sendToProcess(eventType: string, ...data: any[]): Promise<any> {
-    return window.parent.ipc.send(MODULE_ID, eventType, ...data);
+const sendToProcess = (eventType: string, ...data: any[]): Promise<void> => {
+    return window.parent.ipc.send(MODULE_ID, eventType, data);
 }
 
 
@@ -28,7 +32,7 @@ const defaultModuleDir: string = 'developer.Sample_TS_Module';
 /**
  *  Handle events from the process.
  */
-window.parent.ipc.on(MODULE_ID, async (_, eventType: string, ...data: any[]) => {
+const handleEvent = (eventType: string, data: any[]) => {
     switch (eventType) {
         case 'sample-setting': {
             const bool: boolean = data[0];
@@ -77,7 +81,7 @@ window.parent.ipc.on(MODULE_ID, async (_, eventType: string, ...data: any[]) => 
         }
 
     }
-});
+};
 
 /**
  *  Formats HTML text. 
