@@ -5,15 +5,13 @@
   "author": "aarontburn",
   "scripts": {
     "build": "npm run dev_export",
-    "start": "npm run build && electron ./node_modules/@nexus/nexus-client/main.js --dev",
+    "start": "npm run build && electron ./node_modules/@nexus/nexus-client/main.js --dev --trace-warnings",
     "export": "node node_modules/@nexus/nexus-exporter/exporter.js",
     "dev_export": "node node_modules/@nexus/nexus-exporter/exporter.js --dev",
-    "update-nexus": "npm update @nexus/nexus-exporter && npm update @nexus/nexus-module-builder && npm update @nexus/nexus-client"
+    "update-nexus": "npm update @nexus/nexus-client"
   },
   "devDependencies": {
     "@nexus/nexus-client": "https://gitpkg.vercel.app/aarontburn/nexus-core/nexus/dist?main",
-    "@nexus/nexus-exporter": "https://gitpkg.vercel.app/aarontburn/nexus-core/exporter?main",
-    "@nexus/nexus-module-builder": "https://gitpkg.vercel.app/aarontburn/nexus-core/module-builder/dist?main",
     "@types/yauzl-promise": "^4.0.1",
     "electron": "^28.0.0",
     "typescript": "^4.8.3",
