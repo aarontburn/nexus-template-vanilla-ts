@@ -4,14 +4,14 @@
   "description": "A developer template to create a module using vanilla TS and HTML for Nexus.",
   "author": "aarontburn",
   "scripts": {
+    "postinstall": "npm install https://gitpkg.vercel.app/aarontburn/nexus-core/nexus/dist?main --no-save",
     "build": "npm run dev_export",
     "start": "npm run build && electron ./node_modules/@nexus/nexus-client/main.js --dev --trace-warnings",
     "export": "node node_modules/@nexus/nexus-exporter/exporter.js",
     "dev_export": "node node_modules/@nexus/nexus-exporter/exporter.js --dev",
-    "update-nexus": "npm update @nexus/nexus-client"
+    "update-nexus": "npm run postinstall"
   },
   "devDependencies": {
-    "@nexus/nexus-client": "https://gitpkg.vercel.app/aarontburn/nexus-core/nexus/dist?main",
     "@types/yauzl-promise": "^4.0.1",
     "electron": "^28.0.0",
     "typescript": "^4.8.3",
