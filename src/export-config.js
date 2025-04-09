@@ -4,7 +4,7 @@ module.exports = {
     build: {
         name: "Sample TS Module",
         id: "developer.Sample_TS_Module",
-        process: "./process/main",
+        process: "./process/main.js",
         replace: [
             {
                 from: "{EXPORTED_MODULE_ID}",

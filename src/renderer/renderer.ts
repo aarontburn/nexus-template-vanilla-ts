@@ -1,25 +1,9 @@
-window.parent.ipc.on(window, (eventType: string, data: any[]) => {
-    handleEvent(eventType, data);
-});
-
-/**
- *  Sends information to the the process.
- * 
- *  @param eventType    The name of the event.
- *  @param data         Any data to send.
- */
+// Sends information to the the process.
 const sendToProcess = (eventType: string, ...data: any[]): Promise<void> => {
     return window.parent.ipc.send(window, eventType, data);
 }
 
-
-// Instruct the module process to initialize once the renderer is ready.
-sendToProcess("init");
-
-
-/**
- *  Handle events from the process.
- */
+// Handle events from the process.
 const handleEvent = (eventType: string, data: any[]) => {
     switch (eventType) {
         case 'sample-setting': {
@@ -29,8 +13,23 @@ const handleEvent = (eventType: string, data: any[]) => {
             html.innerText = data[0] ? 'on' : 'off'
             break;
         }
+        default: {
+            console.warn("Uncaught message: " + eventType + " | " + data)
+            break;
+        }
     }
 }
+
+// Attach event handler.
+window.parent.ipc.on(window, (eventType: string, data: any[]) => {
+    handleEvent(eventType, data);
+});
+
+
+
+
+// Instruct the module process to initialize once the renderer is ready.
+sendToProcess("init");
 
 
 let counter = 0;
@@ -41,5 +40,7 @@ const setCounter = (count: number) => {
 setCounter(0);
 
 document.getElementById("counter").addEventListener("click", () => setCounter(counter + 1));
-document.getElementById("counter-button").addEventListener("click", () => sendToProcess("count", counter));
+
+const sendButton: HTMLElement = document.getElementById("send-button")
+sendButton.addEventListener("click", () => sendToProcess("count", counter));
 
