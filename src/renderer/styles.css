@@ -13,6 +13,8 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 a {
     font-weight: 500;
     color: #646cff;
@@ -95,4 +97,19 @@ button:focus-visible {
     mask-image: url("./assets/logo.svg");
     mask-position: center;
     background-color: var(--accent-color);
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+    }
 }

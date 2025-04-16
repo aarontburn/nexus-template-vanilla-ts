@@ -19,7 +19,14 @@ export default class SampleProcess extends Process {
      *      and should not contain logic relevant to the renderer.
      */
     public constructor() {
-        super(MODULE_ID, MODULE_NAME, HTML_PATH, ICON_PATH);
+		super({
+			moduleID: MODULE_ID,
+			moduleName: MODULE_NAME,
+			paths: {
+				htmlPath: HTML_PATH,
+                iconPath: ICON_PATH
+			}
+		});
     }
 
     /**
