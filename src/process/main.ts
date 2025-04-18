@@ -34,8 +34,8 @@ export default class SampleProcess extends Process {
      *      renderer sends the 'init' signal.
      * 
      */
-    public initialize(): void {
-        super.initialize(); // This should be called.
+    public async initialize(): Promise<void> {
+        await super.initialize(); // This should be called.
 
     }
 
@@ -52,7 +52,7 @@ export default class SampleProcess extends Process {
     }
 
 
-    public refreshSettings(modifiedSetting: Setting<unknown>): void {
+    public async onSettingModified(modifiedSetting: Setting<unknown>): Promise<void> {
         if (modifiedSetting.getAccessID() === 'sample_bool') {
             this.sendToRenderer('sample-setting', modifiedSetting.getValue());
         }
