@@ -52,7 +52,6 @@ h1 {
     will-change: filter;
     transition: filter 300ms;
     animation: logo-spin infinite 20s linear;
-
 }
 
 

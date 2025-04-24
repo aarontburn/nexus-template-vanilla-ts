@@ -26,8 +26,6 @@ window.ipc.on(window, (eventType: string, data: any[]) => {
 });
 
 
-
-
 // Instruct the module process to initialize once the renderer is ready.
 sendToProcess("init");
 

@@ -8,38 +8,38 @@ const MODULE_NAME: string = "{EXPORTED_MODULE_NAME}";
 // ---------------------------------------------------
 const HTML_PATH: string = path.join(__dirname, "../renderer/index.html");
 
+
+// If you have an icon, specify the relative path from this file.
+// Can be a .png, .jpeg, .jpg, or .svg
 // const ICON_PATH: string = path.join(__dirname, "...")
+
 const ICON_PATH: string = undefined;
 
 
 export default class SampleProcess extends Process {
 
     /**
-     *  The constructor. Should not directly be called, 
-     *      and should not contain logic relevant to the renderer.
+     *  The constructor. At this point, the renderer may not be fully initialized yet;
+     *  therefor do not do any logic important to the renderer and 
+     *  instead put that logic in initialize().
      */
     public constructor() {
-		super({
-			moduleID: MODULE_ID,
-			moduleName: MODULE_NAME,
-			paths: {
-				htmlPath: HTML_PATH,
+        super({
+            moduleID: MODULE_ID,
+            moduleName: MODULE_NAME,
+            paths: {
+                htmlPath: HTML_PATH,
                 iconPath: ICON_PATH
-			}
-		});
+            }
+        });
     }
 
-    /**
-     *  The entry point of the module. Will be called once the 
-     *      renderer sends the 'init' signal.
-     * 
-     */
+    // The entry point of the module. Will be called once the renderer sends the 'init' signal.
     public async initialize(): Promise<void> {
         await super.initialize(); // This should be called.
-
     }
 
-
+    // Add settings/section headers.
     public registerSettings(): (Setting<unknown> | string)[] {
         return [
             "Sample Setting Group",
@@ -51,29 +51,27 @@ export default class SampleProcess extends Process {
         ];
     }
 
-
-    public async onSettingModified(modifiedSetting: Setting<unknown>): Promise<void> {
-        if (modifiedSetting.getAccessID() === 'sample_bool') {
+    // Fired whenever a setting is modified.
+    public async onSettingModified(modifiedSetting?: Setting<unknown>): Promise<void> {
+        if (modifiedSetting?.getAccessID() === 'sample_bool') {
             this.sendToRenderer('sample-setting', modifiedSetting.getValue());
         }
     }
 
-    public async handleEvent(eventName: string, data: any[]): Promise<any> {
-        switch (eventName) {
-            case "init": {
-                // This case is required to properly receive the initialization signal
-                //      from the renderer.
+    // Receive events sent from the renderer.
+    public async handleEvent(eventType: string, data: any[]): Promise<any> {
+        switch (eventType) {
+            case "init": { // This is called when the renderer is ready to receive events.
                 this.initialize();
                 break;
             }
-
             case "count": {
-                console.log(MODULE_NAME + ": Received 'count': " + data[0]);
+                console.info(`[${MODULE_NAME}] Received 'count': ${data[0]}`);
                 break;
             }
 
             default: {
-                console.warn(`Uncaught event: eventName: ${eventName} | data: ${data}`)
+                console.info(`[${MODULE_NAME}] Unhandled event: eventType: ${eventType} | data: ${data}`);
                 break;
             }
         }
