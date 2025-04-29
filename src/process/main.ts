@@ -1,6 +1,6 @@
 import * as path from "path";
-import { Process, Setting } from "@nexus/nexus-module-builder"
-import { BooleanSetting } from "@nexus/nexus-module-builder/settings/types";
+import { Process, Setting } from "@nexus-app/nexus-module-builder"
+import { BooleanSetting } from "@nexus-app/nexus-module-builder/settings/types";
 
 // These is replaced to the ID specified in export-config.js during export. DO NOT MODIFY.
 const MODULE_ID: string = "{EXPORTED_MODULE_ID}";
