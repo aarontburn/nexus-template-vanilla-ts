@@ -1,9 +1,38 @@
 {
-    "name": "{EXPORTED_MODULE_NAME}",
+    "name": "Sample TS Module",
     "author": "developer",
-    "version": "1.0.0",
+    "id": "developer.Sample TS Module",
+    "version": " 1.0.0",
     "description": "A developer template to create a module using vanilla TS and HTML.",
-    "build_version": 4,
+    "link": "https://github.com/aarontburn/modules-template-vanilla-ts",
+    "git-latest": {
+        "git-username": "git-username",
+        "git-repo-name": "repository-name"
+    },
     "platforms": [],
-    "link": "https://github.com/aarontburn/modules-template-vanilla-ts"
+    "build": {
+        "build-version": 1,
+        "excluded": [
+            "electron.ts"
+        ],
+        "included": [],
+        "process": "./process/main.js",
+        "replace": [
+            {
+                "from": "{EXPORTED_MODULE_ID}",
+                "to": "%id%",
+                "at": [
+                    "./process/main.ts"
+                ]
+            },
+            {
+                "from": "{EXPORTED_MODULE_NAME}",
+                "to": "%name%",
+                "at": [
+                    "./process/main.ts",
+                    "./module-info.json"
+                ]
+            }
+        ]
+    }
 }
