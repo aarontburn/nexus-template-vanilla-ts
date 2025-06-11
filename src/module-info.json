@@ -9,7 +9,7 @@
         "git-username": "git-username",
         "git-repo-name": "repository-name"
     },
-    "platforms": [],
+    "platforms": ["win32", "linux", "darwin"],
     "build": {
         "build-version": 1,
         "excluded": [
